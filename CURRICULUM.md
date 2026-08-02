@@ -10,19 +10,19 @@
 
 ### 第 1 章 函数
 - 1.1 函数概念与表示 — ✅ `intro` 步骤 2（函数=输入输出机器）
-- 1.2 函数的几类特性（有界/单调/奇偶/周期）— 🚧 `function-properties`
-- 1.3 反函数与复合函数 — 🚧 `inverse-composite`
-- 1.4 初等函数（幂/指/对/三角/反三角）— 🚧 `elementary-functions`
-- 1.5 极坐标与参数方程 — 🚧 `polar-parametric`（用 parametric 原语）
+- 1.2 函数的几类特性（...）— ✅ `function-properties`
+- 1.3 反函数与复合函数（...）— ✅ `inverse-composite`
+- 1.4 初等函数（...）— ✅ `elementary-functions`
+- 1.5 极坐标与参数方程（...）— ✅ `polar-parametric`
 
 ### 第 2 章 极限与连续
 - 2.1 数列极限 — ✅ `limit` 步骤 1
 - 2.2 函数极限 — ✅ `limit` 步骤 2
 - 2.3 极限的运算（四则/复合/夹逼）— ✅ `limit-laws`（夹逼、等价无穷小、复合极限）
 - 2.4 单调有界原理与重要极限 — ✅ `limit` 步骤 4（sin(x)/x）
-- 2.5 无穷小与无穷大的比较 — 🚧 `infinitesimals`（o(x)/O(x)/等价无穷小）
+- 2.5 无穷小与无穷大（...）— ✅ `infinitesimals`
 - 2.6 连续与间断 — ✅ `limit` 步骤 3
-- 2.7 闭区间上连续函数的性质（最值/介值/有界）— 🚧 `cv-continuity`
+- 2.7 闭区间上连续函数（...）— ✅ `cv-continuity`
 
 ## 第二篇 一元函数微分学（大一上 §2）
 
@@ -30,16 +30,16 @@
 - 3.1 导数概念 — ✅ `derivative` 步骤 1-2
 - 3.2 求导法则（四则/链式/反函数）— ✅ `derivative-rules`
 - 3.3 高阶导数 — ✅ `derivative` 步骤 4
-- 3.4 隐函数与参数方程求导 — 🚧 `implicit-derivative`
-- 3.5 微分及其应用 — 🚧 `differential`
+- 3.4 隐函数与参数方程求导（...）— ✅ `implicit-derivative`
+- 3.5 微分及其应用（...）— ✅ `differential`
 
 ### 第 4 章 微分中值定理与应用
 - 4.1 罗尔/拉格朗日/柯西中值定理 — ✅ `mean-value-theorem`
 - 4.2 洛必达法则 — ✅ `lhopital`
 - 4.3 泰勒公式 — ✅ `taylor`（全部 4 步）
-- 4.4 函数单调性与极值 — 🚧 `monotonicity-extrema`
+- 4.4 函数单调性与极值（...）— ✅ `monotonicity-extrema`
 - 4.5 函数凹凸与拐点 — ✅ `convexity`
-- 4.6 曲率 — 🚧 `curvature`
+- 4.6 曲率（...）— ✅ `curvature`
 - 4.7 方程近似解（牛顿法）— 🚧 `newtons-method`
 
 ## 第三篇 一元函数积分学（大一下 §1）
@@ -114,9 +114,9 @@
 ---
 
 ## 进度统计
-- ✅ 已完成：20 套（... partial-derivative / gradient / double-integral / lagrange-multiplier）
-- 🚧 计划中：约 30 套
-- 配套题库：74 题，覆盖全部 20 套课案；考试支持综合卷 + 单章卷
+- ✅ 已完成：30 套（... partial-derivative / gradient / double-integral / lagrange-multiplier）
+- 🚧 计划中：约 20 套
+- 配套题库：74 题，覆盖全部 30 套课案，覆盖全部 20 套课案；考试支持综合卷 + 单章卷
 - 🎯 批次 1（一元主线）+ 批次 2（一元进阶）完成；下一步批次 3（多元微积分）
 - ❌ 尚未规划：暂无（大纲已覆盖到曲面论初步）
 - 🎯 批次 1 完成（一元微积分主线）
