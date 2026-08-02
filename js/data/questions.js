@@ -532,6 +532,40 @@
       points: ['偏导数几何意义'],
     },
 
+    // ============ gradient（方向导数与梯度） ============
+    {
+      id: 'q-gr-1', courseId: 'gradient', chapter: '梯度定义', difficulty: 2, type: 'single',
+      stem: '$f(x,y) = x^2 + y^2$ 在点 $(1, 2)$ 处的梯度 $\\nabla f =$ ？',
+      options: ['A. $(1, 2)$', 'B. $(2, 4)$', 'C. $(2x, 2y)$', 'D. $(4, 2)$'],
+      answer: 1,
+      explain: '$\\partial f/\\partial x = 2x = 2$，$\\partial f/\\partial y = 2y = 4$，故 $\\nabla f = (2, 4)$。注意 $(2x,2y)$ 是表达式不是具体值。',
+      points: ['梯度计算'],
+    },
+    {
+      id: 'q-gr-2', courseId: 'gradient', chapter: '梯度性质', difficulty: 2, type: 'single',
+      stem: '梯度 $\\nabla f$ 与过该点的等高线有什么几何关系？',
+      options: ['A. 平行', 'B. 垂直', 'C. 成 45° 角', 'D. 无固定关系'],
+      answer: 1,
+      explain: '梯度**垂直于等高线**，指向 $f$ 增大方向。因为沿等高线 $f$ 不变，方向导数 $\\nabla f \\cdot \\mathbf{u} = 0$。',
+      points: ['梯度垂直等高线'],
+    },
+    {
+      id: 'q-gr-3', courseId: 'gradient', chapter: '方向导数', difficulty: 3, type: 'single',
+      stem: '若 $|\\nabla f| = 5$，方向 $\\mathbf{u}$ 与 $\\nabla f$ 夹角 $\\theta = 60°$，则方向导数 $D_{\\mathbf{u}}f =$ ？',
+      options: ['A. 5', 'B. 2.5', 'C. $5\\sqrt{3}/2$', 'D. 0'],
+      answer: 1,
+      explain: '$D_{\\mathbf{u}}f = |\\nabla f|\\cos\\theta = 5 \\times \\cos 60° = 5 \\times 0.5 = 2.5$。',
+      points: ['方向导数公式'],
+    },
+    {
+      id: 'q-gr-4', courseId: 'gradient', chapter: '最速下降', difficulty: 3, type: 'judge',
+      stem: '最速下降法中，每一步沿 $-\\nabla f$ 方向移动，这是因为 $-\\nabla f$ 是 $f$ 下降最快的方向。',
+      options: ['对', '错'],
+      answer: true,
+      explain: '梯度方向是增大最快，反方向 $-\\nabla f$ 自然是下降最快。这是梯度下降优化的理论基础。',
+      points: ['最速下降法', '梯度方向'],
+    },
+
     // ============ ode（微分方程） ============
     {
       id: 'q-ode-1', courseId: 'ode', chapter: '指数增长', difficulty: 1, type: 'single',

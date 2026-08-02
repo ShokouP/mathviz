@@ -78,7 +78,7 @@
 - 9.2 偏导数 — ✅ `partial-derivative`
 - 9.3 全微分 — 🚧 `total-differential`
 - 9.4 复合函数与隐函数求导（多元）— 🚧 `multivariable-chain-rule`
-- 9.5 方向导数与梯度 — 🚧 `gradient`
+- 9.5 方向导数与梯度 — ✅ `gradient`
 - 9.6 多元极值（含拉格朗日乘数法）— 🚧 `lagrange-multiplier`
 
 ### 第 10 章 重积分
@@ -114,9 +114,9 @@
 ---
 
 ## 进度统计
-- ✅ 已完成：17 套（intro / limit / limit-laws / derivative / derivative-rules / mean-value-theorem / lhopital / convexity / integral / indefinite-integral / integral-applications / taylor / series-basics / positive-series / fourier-series / ode / partial-derivative）
-- 🚧 计划中：约 33 套
-- 配套题库：62 题，覆盖全部 17 套课案；考试支持综合卷 + 单章卷
+- ✅ 已完成：18 套（... partial-derivative / gradient）
+- 🚧 计划中：约 32 套
+- 配套题库：66 题，覆盖全部 18 套课案；考试支持综合卷 + 单章卷
 - 🎯 批次 1（一元主线）+ 批次 2（一元进阶）完成；下一步批次 3（多元微积分）
 - ❌ 尚未规划：暂无（大纲已覆盖到曲面论初步）
 - 🎯 批次 1 完成（一元微积分主线）

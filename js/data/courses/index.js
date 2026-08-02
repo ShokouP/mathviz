@@ -16,7 +16,7 @@
     get byId() { return this._byId; },
     get list() {
       // 固定展示顺序
-      const ORDER = ['intro', 'limit', 'limit-laws', 'derivative', 'derivative-rules', 'mean-value-theorem', 'lhopital', 'convexity', 'integral', 'indefinite-integral', 'integral-applications', 'taylor', 'series-basics', 'positive-series', 'fourier-series', 'ode', 'partial-derivative'];
+      const ORDER = ['intro', 'limit', 'limit-laws', 'derivative', 'derivative-rules', 'mean-value-theorem', 'lhopital', 'convexity', 'integral', 'indefinite-integral', 'integral-applications', 'taylor', 'series-basics', 'positive-series', 'fourier-series', 'ode', 'partial-derivative', 'gradient'];
       const all = Object.values(this._byId);
       const ordered = ORDER.map((id) => this._byId[id]).filter(Boolean);
       // 兜底：补上 ORDER 之外的课案
