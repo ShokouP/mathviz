@@ -566,6 +566,40 @@
       points: ['最速下降法', '梯度方向'],
     },
 
+    // ============ double-integral（二重积分） ============
+    {
+      id: 'q-di-1', courseId: 'double-integral', chapter: '概念', difficulty: 2, type: 'single',
+      stem: '$\\iint_D f(x,y)\\,dA$ 当 $f(x,y) > 0$ 时的几何意义是？',
+      options: ['A. 曲线的弧长', 'B. 曲面的面积', 'C. 曲顶柱体的体积', 'D. 区域 D 的面积'],
+      answer: 2,
+      explain: '$f>0$ 时二重积分表示曲面 $z=f(x,y)$ 下方、区域 $D$ 上方的**曲顶柱体体积**。',
+      points: ['二重积分几何意义'],
+    },
+    {
+      id: 'q-di-2', courseId: 'double-integral', chapter: '累次积分', difficulty: 2, type: 'single',
+      stem: '$\\int_0^1 \\int_0^1 (x+y)\\,dy\\,dx$ 的值是？',
+      options: ['A. 1/2', 'B. 1', 'C. 3/2', 'D. 2'],
+      answer: 1,
+      explain: '内层 $\\int_0^1(x+y)dy = x+1/2$，外层 $\\int_0^1(x+1/2)dx = 1/2+1/2 = 1$。',
+      points: ['累次积分计算'],
+    },
+    {
+      id: 'q-di-3', courseId: 'double-integral', chapter: '极坐标', difficulty: 3, type: 'single',
+      stem: '极坐标下二重积分的面积微元 $dA =$ ？',
+      options: ['A. $dr\\,d\\theta$', 'B. $r\\,dr\\,d\\theta$', 'C. $r^2\\,dr\\,d\\theta$', 'D. $\\frac{1}{r}dr\\,d\\theta$'],
+      answer: 1,
+      explain: '极坐标小格面积 $\\approx r\\,\\Delta r\\,\\Delta\\theta$（外圈比内圈宽），故 $dA = r\\,dr\\,d\\theta$。**多了一个 $r$** 是最常见的考点。',
+      points: ['极坐标面积微元'],
+    },
+    {
+      id: 'q-di-4', courseId: 'double-integral', chapter: '极坐标', difficulty: 3, type: 'single',
+      stem: '$\\iint_{x^2+y^2 \\le 1} 1\\,dA$（单位圆面积）用极坐标计算的结果是？',
+      options: ['A. 1', 'B. $\\pi$', 'C. $2\\pi$', 'D. $\\pi/2$'],
+      answer: 1,
+      explain: '$\\int_0^{2\\pi}\\int_0^1 r\\,dr\\,d\\theta = 2\\pi \\cdot 1/2 = \\pi$。正是单位圆面积公式。',
+      points: ['极坐标二重积分', '圆面积'],
+    },
+
     // ============ ode（微分方程） ============
     {
       id: 'q-ode-1', courseId: 'ode', chapter: '指数增长', difficulty: 1, type: 'single',

@@ -31,6 +31,7 @@
     { courseId: 'ode', count: 1 },
     { courseId: 'partial-derivative', count: 2 },
     { courseId: 'gradient', count: 2 },
+    { courseId: 'double-integral', count: 2 },
   ];
 
   App.register('exam', {
