@@ -1,0 +1,474 @@
+[
+  {
+    "number": 1,
+    "category": "阶段 1：项目骨架",
+    "task": "搭建独立项目骨架与本地开发服务器",
+    "steps": [
+      {
+        "step": "在 math/ 下创建独立目录结构：index.html、css/、js/、vendor/、README.md",
+        "completed": true
+      },
+      {
+        "step": "编写 server.js 极简静态服务器（端口 8100，绑 0.0.0.0，打印局域网入口）",
+        "completed": true
+      },
+      {
+        "step": "编写 README.md 声明独立项目边界、技术栈、运行方式",
+        "completed": true
+      },
+      {
+        "step": "编写 .gitignore（忽略 node_modules、临时文件、.env）",
+        "completed": true
+      },
+      {
+        "step": "实现 index.html 基础壳：顶栏 + 主区 + 页面挂载点，引入 KaTeX 与各 js 模块",
+        "completed": true
+      },
+      {
+        "step": "本地启动 server.js 验证空白页可访问（HTTP 200）",
+        "completed": true
+      }
+    ],
+    "passes": true
+  },
+  {
+    "number": 2,
+    "category": "阶段 1：项目骨架",
+    "task": "引入并集成 KaTeX（vendored 本地副本）",
+    "steps": [
+      {
+        "step": "下载 KaTeX 发布包，仅保留 katex.min.css、katex.min.js、fonts/ 三项，放入 vendor/katex/",
+        "completed": true
+      },
+      {
+        "step": "在 index.html 引入 katex.min.css 与 katex.min.js",
+        "completed": true
+      },
+      {
+        "step": "编写 js/lib/math.js 封装 renderMath(node) 工具：扫描 $$...$$ / $...$ / \\\\(...\\\\) 并调用 katex.render",
+        "completed": true
+      },
+      {
+        "step": "编写测试 HTML：含行内与块级公式的页面，验证渲染无报错",
+        "completed": true
+      }
+    ],
+    "passes": true
+  },
+  {
+    "number": 3,
+    "category": "阶段 1：项目骨架",
+    "task": "实现简易 hash 路由与页面挂载机制",
+    "steps": [
+      {
+        "step": "编写 js/router.js：监听 hashchange，按 #/<name> 路由到 pages/* 模块的 mount/unmount",
+        "completed": true
+      },
+      {
+        "step": "编写 js/app.js：页面注册表，默认重定向到首页或上次课案",
+        "completed": true
+      },
+      {
+        "step": "编写占位 pages/home.js 与 pages/settings.js 验证路由可切换",
+        "completed": true
+      },
+      {
+        "step": "浏览器实测 #/home 与 #/settings 来回切换不报错",
+        "completed": true
+      }
+    ],
+    "passes": true
+  },
+  {
+    "number": 4,
+    "category": "阶段 2：可视化引擎",
+    "task": "实现引擎基础：Stage、坐标系、高 DPR 适配",
+    "steps": [
+      {
+        "step": "编写 js/viz/stage.js：封装 Canvas 上下文、resize、devicePixelRatio 适配、rAF 主循环",
+        "completed": true
+      },
+      {
+        "step": "编写 js/viz/axes.js：笛卡尔坐标系绘制（原点、刻度、网格、轴标签、可配置 x/y 范围）",
+        "completed": true
+      },
+      {
+        "step": "编写 js/viz/camera.js 或视口变换：数学坐标 ↔ 屏幕像素映射",
+        "completed": true
+      },
+      {
+        "step": "编写 js/viz/easing.js：常用缓动函数（linear、easeInOutCubic、easeOutBack）",
+        "completed": true
+      },
+      {
+        "step": "在 home 占位页放一个静态坐标系验证渲染正确、DPR 清晰",
+        "completed": true
+      }
+    ],
+    "passes": true
+  },
+  {
+    "number": 5,
+    "category": "阶段 2：可视化引擎",
+    "task": "实现动画原语：曲线、点、切线、矩形、序列叠加",
+    "steps": [
+      {
+        "step": "编写 js/viz/primitives.js：drawCurve(fn, xRange)、drawPoint(x,y)、drawTangent(fn, x0)",
+        "completed": true
+      },
+      {
+        "step": "实现 drawRiemannRects(fn, [a,b], n, mode)：左/右/中点矩形可视化",
+        "completed": true
+      },
+      {
+        "step": "实现 drawTaylorSeries(fn, order, x0)：逐阶多项式叠加绘制",
+        "completed": true
+      },
+      {
+        "step": "编写 js/viz/timeline.js：关键帧驱动的动画时间轴（进度 0→1、可暂停/重播）",
+        "completed": true
+      },
+      {
+        "step": "为每个原语编写可视化自测：手动调用确认图形正确",
+        "completed": true
+      }
+    ],
+    "passes": true
+  },
+  {
+    "number": 6,
+    "category": "阶段 2：可视化引擎",
+    "task": "实现引擎对外 API：执行指令、场景管理、动画控制",
+    "steps": [
+      {
+        "step": "设计 js/viz/engine.js 作为统一入口：execute(scene) / clear() / play(timeline) / pause() / seek(t)",
+        "completed": true
+      },
+      {
+        "step": "实现场景对象模型：scene = { axes: {...}, layers: [{type, props}], timeline?: {...} }",
+        "completed": true
+      },
+      {
+        "step": "实现指令路由：按 layer.type 派发到对应原语",
+        "completed": true
+      },
+      {
+        "step": "对外暴露 window.VIZ 全局对象供对话层调用（与主站解耦的纯引擎接口）",
+        "completed": true
+      },
+      {
+        "step": "编写引擎冒烟自测：构造一个含曲线+切线的场景，execute 后画面正确",
+        "completed": true
+      }
+    ],
+    "passes": true
+  },
+  {
+    "number": 7,
+    "category": "阶段 2：可视化引擎",
+    "task": "定义并文档化可视化指令协议（JSON Schema + 文档）",
+    "steps": [
+      {
+        "step": "编写 viz-protocol.md：列出所有支持的指令类型与字段（plot/tangent/riemann/taylor/point/animate/clear）",
+        "completed": true
+      },
+      {
+        "step": "为每个指令给出 JSON 示例与对应视觉效果说明",
+        "completed": true
+      },
+      {
+        "step": "编写 js/viz/protocol.js：JSON Schema 校验器，validate(scene) 返回 {ok, errors}",
+        "completed": true
+      },
+      {
+        "step": "编写非法指令样例（缺字段/未知 type）验证校验器能拒绝",
+        "completed": true
+      }
+    ],
+    "passes": true
+  },
+  {
+    "number": 8,
+    "category": "阶段 2：可视化引擎",
+    "task": "实现课案页通用框架：分步叙事 + 内嵌画布 + 控件",
+    "steps": [
+      {
+        "step": "编写 js/pages/course.js：通用课案页模板（标题、KaTeX 引言、画布、步骤条、控件栏）",
+        "completed": true
+      },
+      {
+        "step": "实现步骤切换：每步对应一个 scene + 一段说明文字 + 可选动画",
+        "completed": true
+      },
+      {
+        "step": "实现控件：播放/暂停/重播/步进/参数滑块（如 n、order、x0）",
+        "completed": true
+      },
+      {
+        "step": "实现参数滑块与 scene 的双向绑定（拖动→重绘）",
+        "completed": true
+      }
+    ],
+    "passes": true
+  },
+  {
+    "number": 9,
+    "category": "阶段 3：预设课案",
+    "task": "课案 1：极限与连续（ε-δ 逼近可视化）",
+    "steps": [
+      {
+        "step": "编写 js/data/courses/limit.js：课案元数据 + 步骤序列",
+        "completed": true
+      },
+      {
+        "step": "设计步骤：数列极限动画 → 函数极限 ε-δ 双带 → 连续 vs 间断对比",
+        "completed": true
+      },
+      {
+        "step": "为每步配置 scene（坐标范围、曲线、ε/δ 矩形带）与说明文字（含 KaTeX）",
+        "completed": true
+      },
+      {
+        "step": "接入 course.js 框架，路由 #/course/limit 验证完整可播放",
+        "completed": true
+      }
+    ],
+    "passes": true
+  },
+  {
+    "number": 10,
+    "category": "阶段 3：预设课案",
+    "task": "课案 2：导数与微分（切线斜率、瞬时变化率）",
+    "steps": [
+      {
+        "step": "编写 js/data/courses/derivative.js",
+        "completed": true
+      },
+      {
+        "step": "设计步骤：平均变化率割线 → h→0 割线转动成切线 → dy/dx 几何意义 → 高阶导数",
+        "completed": true
+      },
+      {
+        "step": "实现切点滑块 x0 与割线宽度 h 的实时联动动画",
+        "completed": true
+      },
+      {
+        "step": "接入框架并路由验证",
+        "completed": true
+      }
+    ],
+    "passes": true
+  },
+  {
+    "number": 11,
+    "category": "阶段 3：预设课案",
+    "task": "课案 3：积分与黎曼和（矩形细分逼近面积）",
+    "steps": [
+      {
+        "step": "编写 js/data/courses/integral.js",
+        "completed": true
+      },
+      {
+        "step": "设计步骤：面积直觉 → 黎曼矩形（左/右/中点）→ n 增大逼近 → 牛顿-莱布尼茨",
+        "completed": true
+      },
+      {
+        "step": "实现 n 滑块（1→200）实时重绘矩形并显示面积数值逼近",
+        "completed": true
+      },
+      {
+        "step": "接入框架并路由验证",
+        "completed": true
+      }
+    ],
+    "passes": true
+  },
+  {
+    "number": 12,
+    "category": "阶段 3：预设课案",
+    "task": "课案 4：泰勒级数（多项式逐项叠加逼近）",
+    "steps": [
+      {
+        "step": "编写 js/data/courses/taylor.js",
+        "completed": true
+      },
+      {
+        "step": "设计步骤：0 阶常数逼近 → 1 阶切线 → 2 阶曲率 → n 阶逐项叠加 → 收敛半径直觉",
+        "completed": true
+      },
+      {
+        "step": "实现 order 滑块（0→10）逐阶叠加多项式绘制 + 误差曲线",
+        "completed": true
+      },
+      {
+        "step": "接入框架并路由验证",
+        "completed": true
+      }
+    ],
+    "passes": true
+  },
+  {
+    "number": 13,
+    "category": "阶段 3：预设课案",
+    "task": "实现课案总览首页（卡片导航）",
+    "steps": [
+      {
+        "step": "编写 js/pages/home.js：四张课案卡片（封面 SVG、标题、简介、进入按钮）",
+        "completed": true
+      },
+      {
+        "step": "卡片点击跳转 #/course/<id>",
+        "completed": true
+      },
+      {
+        "step": "首页增加入口：进入 AI 对话（#/chat）与设置（#/settings）",
+        "completed": true
+      },
+      {
+        "step": "验证首页四卡 + 两个入口均可点通",
+        "completed": true
+      }
+    ],
+    "passes": true
+  },
+  {
+    "number": 14,
+    "category": "阶段 4：AI 对话层",
+    "task": "实现设置页：API 凭据自填 + 思考模式 + 连通性测试",
+    "steps": [
+      {
+        "step": "编写 js/pages/settings.js：表单含 baseURL、apiKey、model（默认 deepseek-v4-flash）、thinkingMode、reasoningEffort 三档（low/high/max）+ 连通性测试按钮",
+        "completed": true
+      },
+      {
+        "step": "实现 js/ai/config.js：读写 localStorage（key: mathviz.ai.config），baseURL 规范化（去尾斜杠；DeepSeek 官方端点不补 /v1，因 chat/completions 在根路径）",
+        "completed": true
+      },
+      {
+        "step": "实现连通性测试：POST {baseURL}/chat/completions 发最小请求，按状态码给反馈（成功时显示返回模型名）",
+        "completed": true
+      },
+      {
+        "step": "提供\"仅本会话\"勾选：不持久化 key，刷新即清",
+        "completed": true
+      },
+      {
+        "step": "验证：填错 key 给出明确错误；填对能通过测试；reasoningEffort 仅接受 low/high/max",
+        "completed": true
+      }
+    ],
+    "passes": true
+  },
+  {
+    "number": 15,
+    "category": "阶段 4：AI 对话层",
+    "task": "实现 DeepSeek 流式对话核心（SSE 解析 + 思维链分离 + Markdown/KaTeX 渲染）",
+    "steps": [
+      {
+        "step": "编写 js/ai/client.js：封装 fetch + ReadableStream 流式读取 chat/completions，请求体按配置注入 thinking:{type,reasoning_effort}",
+        "completed": true
+      },
+      {
+        "step": "区分渲染：流中 delta.reasoning_content 追加到\"思考过程\"折叠区，delta.content 渲染到正文，二者不混淆",
+        "completed": true
+      },
+      {
+        "step": "实现增量 token 拼接与逐字渲染到对话气泡",
+        "completed": true
+      },
+      {
+        "step": "集成 js/lib/markdown.js + math.js：流式输出渲染 Markdown 与 KaTeX",
+        "completed": true
+      },
+      {
+        "step": "实现 system prompt 注入（含指令协议说明 + 少样本示例）",
+        "completed": true
+      },
+      {
+        "step": "处理错误：网络中断、401、429、5xx 各给独立提示与重试入口",
+        "completed": true
+      }
+    ],
+    "passes": true
+  },
+  {
+    "number": 16,
+    "category": "阶段 4：AI 对话层",
+    "task": "实现流中可视化指令的识别与派发（核心：文本→图形的桥）",
+    "steps": [
+      {
+        "step": "编写 js/ai/protocol-bridge.js：流式扫描 ```viz 围栏代码块的起止边界",
+        "completed": true
+      },
+      {
+        "step": "围栏闭合瞬间调用 protocol.js 校验 JSON，合法则 VIZ.execute(scene)",
+        "completed": true
+      },
+      {
+        "step": "实现\"可视化预览\"分区：对话区显示文字，画布区显示指令结果，二者并排",
+        "completed": true
+      },
+      {
+        "step": "非法指令不阻塞对话：在气泡内显示\"指令格式错误，已跳过\"提示",
+        "completed": true
+      },
+      {
+        "step": "实测：让模型回答\"画 sin(x)\"类问题，验证围栏识别→校验→执行链路通",
+        "completed": true
+      }
+    ],
+    "passes": true
+  },
+  {
+    "number": 17,
+    "category": "阶段 4：AI 对话层",
+    "task": "实现对话历史本地持久化与会话管理",
+    "steps": [
+      {
+        "step": "编写 js/ai/history.js：localStorage 存多会话（key: mathviz.chat.sessions）",
+        "completed": true
+      },
+      {
+        "step": "实现会话列表侧栏：新建/切换/重命名/删除/清空全部",
+        "completed": true
+      },
+      {
+        "step": "每条消息存 {role, content, vizScenes?[]}，重开会话可回放可视化",
+        "completed": true
+      },
+      {
+        "step": "实现\"应用到画布\"：点击历史消息中的指令可重新执行其 scene",
+        "completed": true
+      }
+    ],
+    "passes": true
+  },
+  {
+    "number": 18,
+    "category": "阶段 5：集成与验证",
+    "task": "端到端联调与文档收尾",
+    "steps": [
+      {
+        "step": "全链路冒烟：首页→课案→对话→设置来回切换无残留 DOM 与内存泄漏",
+        "completed": true
+      },
+      {
+        "step": "对话驱动可视化实测：准备 5 个典型提问，验证模型返回的指令能正确执行",
+        "completed": true
+      },
+      {
+        "step": "移动端 (≤820px) 响应式检查：画布缩放、控件可用、对话区可读",
+        "completed": true
+      },
+      {
+        "step": "完善 README：运行方式、API 配置、指令协议链接、扩展课案指南",
+        "completed": true
+      },
+      {
+        "step": "编写 CHANGELOG.md 首条（v0.1.0：MVP 发布）",
+        "completed": true
+      }
+    ],
+    "passes": true
+  }
+]

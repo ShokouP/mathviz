@@ -1,0 +1,131 @@
+/* mathviz — base.css 设计令牌与基础元素 */
+
+:root {
+  /* 色彩：3b1b 风格的深色为主，强调几何与运动 */
+  --bg: #0e1116;
+  --bg-elev: #161b22;
+  --bg-elev-2: #1f2630;
+  --fg: #e6edf3;
+  --fg-muted: #9aa7b4;
+  --fg-dim: #6b7785;
+  --border: #2a323c;
+  --border-strong: #3a4452;
+
+  --accent: #4f9cf9;        /* 主蓝（曲线、链接） */
+  --accent-2: #ff8c42;      /* 橙（高亮、切线） */
+  --accent-3: #9d7aff;      /* 紫（级数、二次对象） */
+  --accent-4: #4ade80;      /* 绿（成功、面积） */
+  --danger: #f87171;
+  --warn: #fbbf24;
+
+  --grid-line: rgba(255, 255, 255, 0.06);
+  --grid-axis: rgba(255, 255, 255, 0.35);
+
+  --radius: 10px;
+  --radius-sm: 6px;
+  --shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
+
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+    "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "JetBrains Mono", "SF Mono", "Cascadia Code", Consolas, monospace;
+
+  --topbar-h: 56px;
+  --maxw: 1180px;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --bg: #f7f8fa;
+    --bg-elev: #ffffff;
+    --bg-elev-2: #eef1f4;
+    --fg: #1a1f26;
+    --fg-muted: #5b6573;
+    --fg-dim: #8a93a0;
+    --border: #e0e4ea;
+    --border-strong: #c8d0da;
+    --grid-line: rgba(0, 0, 0, 0.06);
+    --grid-axis: rgba(0, 0, 0, 0.4);
+    --shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+  }
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+body {
+  font-family: var(--font-sans);
+  background: var(--bg);
+  color: var(--fg);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+}
+a:hover { text-decoration: underline; }
+
+h1, h2, h3, h4 { line-height: 1.25; margin: 0 0 0.5em; font-weight: 650; }
+
+button {
+  font-family: inherit;
+  font-size: 14px;
+  padding: 8px 16px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-strong);
+  background: var(--bg-elev-2);
+  color: var(--fg);
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, opacity 0.15s;
+}
+button:hover { background: var(--bg-elev); border-color: var(--accent); }
+button:active { transform: translateY(1px); }
+button:disabled { opacity: 0.5; cursor: not-allowed; }
+button.primary {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+}
+button.primary:hover { filter: brightness(1.08); }
+button.ghost { background: transparent; }
+button.danger { border-color: var(--danger); color: var(--danger); }
+
+input, select, textarea {
+  font-family: inherit;
+  font-size: 14px;
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-strong);
+  background: var(--bg);
+  color: var(--fg);
+  width: 100%;
+}
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(79, 156, 249, 0.18);
+}
+
+code, pre { font-family: var(--font-mono); }
+
+.card {
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+}
+
+.muted { color: var(--fg-muted); }
+.dim { color: var(--fg-dim); }
+.mono { font-family: var(--font-mono); }
+
+/* KaTeX 微调：行内公式不撑高行高 */
+.katex { font-size: 1.05em; }
+.katex-display { margin: 0.8em 0; overflow-x: auto; overflow-y: hidden; }

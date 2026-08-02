@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="3b1b 式高等数学可视化教学站 — 极限、导数、积分、泰勒级数，配合 DeepSeek 实时对话驱动可视化。" />
+  <title>mathviz · 高等数学可视化</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='26' font-size='26'>∫</text></svg>" />
+  <!-- KaTeX（任务 2 下载 vendor 副本后启用） -->
+  <link rel="stylesheet" href="vendor/katex/katex.min.css" />
+  <script defer src="vendor/katex/katex.min.js"></script>
+  <!-- 站点样式 -->
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/layout.css" />
+  <link rel="stylesheet" href="css/pages.css" />
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#/home">
+      <span class="brand-glyph">∫</span>
+      <span class="brand-text">mathviz</span>
+    </a>
+    <nav class="topnav">
+      <a href="#/home">课案</a>
+      <a href="#/practice">练习</a>
+      <a href="#/exam">考试</a>
+      <a href="#/chat">AI 对话</a>
+      <a href="#/settings">设置</a>
+      <span class="kbd-hint" onclick="App._toggleHelp()" title="键盘快捷键 (?)">⌨</span>
+    </nav>
+  </header>
+
+  <main id="app">
+    <!-- 页面挂载点：router.js 按 hash 切换 pages/* 模块 -->
+    <div class="loading">加载中…</div>
+  </main>
+
+  <!-- 应用入口：先定义核心对象（App/Router/各 lib），再让 pages/ai 注册 -->
+  <script defer src="js/lib/util.js"></script>
+  <script defer src="js/lib/math-eval.js"></script>
+  <script defer src="js/lib/math.js"></script>
+  <script defer src="js/lib/markdown.js"></script>
+  <script defer src="js/viz/easing.js"></script>
+  <script defer src="js/viz/stage.js"></script>
+  <script defer src="js/viz/axes.js"></script>
+  <script defer src="js/viz/primitives.js"></script>
+  <script defer src="js/viz/timeline.js"></script>
+  <script defer src="js/viz/protocol.js"></script>
+  <script defer src="js/viz/engine.js"></script>
+  <script defer src="js/router.js"></script>
+  <script defer src="js/app.js"></script>
+  <!-- 数据层与页面/对话层：加载时向已存在的 App/COURSES 注册 -->
+  <script defer src="js/data/courses/index.js"></script>
+  <script defer src="js/data/questions.js"></script>
+  <script defer src="js/data/courses/intro.js"></script>
+  <script defer src="js/data/courses/limit.js"></script>
+  <script defer src="js/data/courses/limit-laws.js"></script>
+  <script defer src="js/data/courses/derivative.js"></script>
+  <script defer src="js/data/courses/derivative-rules.js"></script>
+  <script defer src="js/data/courses/mean-value-theorem.js"></script>
+  <script defer src="js/data/courses/lhopital.js"></script>
+  <script defer src="js/data/courses/convexity.js"></script>
+  <script defer src="js/data/courses/integral.js"></script>
+  <script defer src="js/data/courses/indefinite-integral.js"></script>
+  <script defer src="js/data/courses/integral-applications.js"></script>
+  <script defer src="js/data/courses/taylor.js"></script>
+  <script defer src="js/data/courses/series-basics.js"></script>
+  <script defer src="js/data/courses/positive-series.js"></script>
+  <script defer src="js/data/courses/fourier-series.js"></script>
+  <script defer src="js/data/courses/ode.js"></script>
+  <script defer src="js/data/courses/partial-derivative.js"></script>
+  <script defer src="js/ai/config.js"></script>
+  <script defer src="js/ai/system-prompt.js"></script>
+  <script defer src="js/ai/client.js"></script>
+  <script defer src="js/ai/history.js"></script>
+  <script defer src="js/ai/protocol-bridge.js"></script>
+  <script defer src="js/pages/home.js"></script>
+  <script defer src="js/pages/course.js"></script>
+  <script defer src="js/pages/chat.js"></script>
+  <script defer src="js/pages/practice.js"></script>
+  <script defer src="js/pages/exam.js"></script>
+  <script defer src="js/pages/settings.js"></script>
+</body>
+</html>
