@@ -32,6 +32,7 @@
     { courseId: 'partial-derivative', count: 2 },
     { courseId: 'gradient', count: 2 },
     { courseId: 'double-integral', count: 2 },
+    { courseId: 'lagrange-multiplier', count: 2 },
   ];
 
   App.register('exam', {

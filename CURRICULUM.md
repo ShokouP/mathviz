@@ -79,7 +79,7 @@
 - 9.3 全微分 — 🚧 `total-differential`
 - 9.4 复合函数与隐函数求导（多元）— 🚧 `multivariable-chain-rule`
 - 9.5 方向导数与梯度 — ✅ `gradient`
-- 9.6 多元极值（含拉格朗日乘数法）— 🚧 `lagrange-multiplier`
+- 9.6 多元极值（含拉格朗日乘数法）— ✅ `lagrange-multiplier`
 
 ### 第 10 章 重积分
 - 10.1 二重积分概念与计算 — ✅ `double-integral`
@@ -114,9 +114,9 @@
 ---
 
 ## 进度统计
-- ✅ 已完成：19 套（... partial-derivative / gradient / double-integral）
-- 🚧 计划中：约 31 套
-- 配套题库：70 题，覆盖全部 19 套课案；考试支持综合卷 + 单章卷
+- ✅ 已完成：20 套（... partial-derivative / gradient / double-integral / lagrange-multiplier）
+- 🚧 计划中：约 30 套
+- 配套题库：74 题，覆盖全部 20 套课案；考试支持综合卷 + 单章卷
 - 🎯 批次 1（一元主线）+ 批次 2（一元进阶）完成；下一步批次 3（多元微积分）
 - ❌ 尚未规划：暂无（大纲已覆盖到曲面论初步）
 - 🎯 批次 1 完成（一元微积分主线）

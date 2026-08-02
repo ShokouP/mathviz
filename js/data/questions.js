@@ -600,6 +600,40 @@
       points: ['极坐标二重积分', '圆面积'],
     },
 
+    // ============ lagrange-multiplier（拉格朗日乘数法） ============
+    {
+      id: 'q-lm-1', courseId: 'lagrange-multiplier', chapter: '核心方程', difficulty: 2, type: 'single',
+      stem: '拉格朗日乘数法的核心方程是？',
+      options: ['A. $\\nabla f = 0$', 'B. $\\nabla f = \\lambda \\nabla g$', 'C. $f = \\lambda g$', 'D. $\\nabla g = 0$'],
+      answer: 1,
+      explain: '条件极值点处 $\\nabla f$ 与 $\\nabla g$ 共线，即 $\\nabla f = \\lambda \\nabla g$。加上约束 $g=c$ 解方程组。',
+      points: ['拉格朗日方程'],
+    },
+    {
+      id: 'q-lm-2', courseId: 'lagrange-multiplier', chapter: '几何意义', difficulty: 2, type: 'single',
+      stem: '拉格朗日乘数法中，极值点处目标等高线与约束曲线的关系是？',
+      options: ['A. 相交', 'B. 相切', 'C. 垂直', 'D. 无关系'],
+      answer: 1,
+      explain: '极值点处等高线与约束曲线**相切**（有公共切线），所以两梯度都垂直于切线 → 共线。',
+      points: ['等高线与约束相切'],
+    },
+    {
+      id: 'q-lm-3', courseId: 'lagrange-multiplier', chapter: 'λ 的含义', difficulty: 3, type: 'single',
+      stem: '拉格朗日乘数 $\\lambda$ 的经济学含义是？',
+      options: ['A. 目标函数的最大值', 'B. 约束的松弛量', 'C. 约束放松一个单位时目标的最优变化率', 'D. 约束的梯度模长'],
+      answer: 2,
+      explain: '$\\lambda = df^*/dc$，即"影子价格"——约束放松一点，目标能改善多少。',
+      points: ['乘数 λ 的含义', '影子价格'],
+    },
+    {
+      id: 'q-lm-4', courseId: 'lagrange-multiplier', chapter: '计算', difficulty: 3, type: 'fill',
+      stem: '原点到直线 $x+y=4$ 的最短距离 = ？',
+      options: [],
+      answer: '2.828',
+      explain: '拉格朗日：$f=x^2+y^2$，$g=x+y-4=0$。解得 $x=y=2$，距离 $= \\sqrt{4+4} = 2\\sqrt{2} \\approx 2.828$。',
+      points: ['拉格朗日计算', '点到直线距离'],
+    },
+
     // ============ ode（微分方程） ============
     {
       id: 'q-ode-1', courseId: 'ode', chapter: '指数增长', difficulty: 1, type: 'single',
