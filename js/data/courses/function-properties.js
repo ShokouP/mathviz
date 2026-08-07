@@ -281,19 +281,21 @@ $$f(x + T) = f(x),$$
         onControl: function (name, value, scene) {
           if (name !== 'omega') return;
           var w = value;
-          var T = (2 * Math.PI) / w;
+          // 保护 w→0 时 T 发散：w 极小时用大周期占位（数学上 ω=0 退化为常数）
+          var T = Math.abs(w) < 1e-4 ? 9999 : (2 * Math.PI) / w;
           // 更新曲线表达式（清缓存）
           scene.layers[2].fn = 'sin(' + w + '*x)';
           delete scene.layers[2]._fn;
-          // 右界竖线
-          scene.layers[1].from = [T, -1.6];
-          scene.layers[1].to = [T, 1.6];
+          // 右界竖线（T 超出视野时不画在画布内,但坐标仍需有限数）
+          var Tvis = Math.max(-20, Math.min(20, T));
+          scene.layers[1].from = [Tvis, -1.6];
+          scene.layers[1].to = [Tvis, 1.6];
           // 周期末端点（取 sin(T)=sin(2π)=0）
-          scene.layers[4].x = T;
+          scene.layers[4].x = Tvis;
           scene.layers[4].y = 0;
           scene.layers[4].label = 'x=T';
           // 结论文字
-          scene.layers[6].text = 'ω=' + w.toFixed(2) + '  →  周期 T=2π/ω≈' + T.toFixed(2);
+          scene.layers[6].text = 'ω=' + w.toFixed(2) + '  →  周期 T=2π/ω≈' + (isFinite(T) ? T.toFixed(2) : '∞');
         },
       },
     ],

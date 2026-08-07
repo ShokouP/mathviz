@@ -23,7 +23,9 @@
   var TRUE_ROOT = Math.sqrt(2);
 
   // 牛顿迭代一步：x_{n+1} = x_n - f(x_n)/f'(x_n) = x_n - (x_n^2-2)/(2x_n)
+  // 保护 x→0 时除零（返回大数表示发散）
   function newtonStep(x) {
+    if (Math.abs(x) < 1e-6) return 1e6; // 切线水平，迭代发散
     return x - (x * x - 2) / (2 * x);
   }
 
@@ -82,8 +84,15 @@ $$x_{n+1} = x_n - \\frac{x_n^2 - 2}{2x_n} = \\frac{1}{2}\\left(x_n + \\frac{2}{x
           if (name !== 'xn') return;
           var xn = value;
           var fxn = xn * xn - 2;
-          // x_{n+1} = xn - f(xn)/f'(xn)
-          var xnext = newtonStep(xn);
+          // x_{n+1} = xn - f(xn)/f'(xn)，保护 xn→0 时除零
+          var xnext;
+          if (Math.abs(xn) < 1e-6) {
+            xnext = 1000; // 切线竖直，交点在无穷远
+          } else {
+            xnext = xn - fxn / (2 * xn);
+          }
+          // 限幅到可视范围,避免 Infinity 污染渲染
+          xnext = Math.max(-2, Math.min(4, xnext));
           // 当前点
           scene.layers[3].x = xn;
           scene.layers[3].y = fxn;
@@ -148,8 +157,8 @@ $$x_{n+1} = x_n - \\frac{x_n^2 - 2}{2x_n} = \\frac{1}{2}\\left(x_n + \\frac{2}{x
           scene.layers[5].x = xs[1]; scene.layers[5].label = 'x₁=' + xs[1].toFixed(3);
           scene.layers[6].x = xs[2]; scene.layers[6].label = 'x₂=' + xs[2].toFixed(3);
           scene.layers[7].x = xs[3]; scene.layers[7].label = 'x₃=' + xs[3].toFixed(4);
-          scene.layers[9].text = '从 x₀=' + xs[0].toFixed(2) + ' 出发，4 步收敛到 √2';
-          scene.layers[10].text = 'x: ' + xs[0].toFixed(3) + '→' + xs[1].toFixed(3) + '→' + xs[2].toFixed(3) + '→' + xs[3].toFixed(4);
+          scene.layers[8].text = '从 x₀=' + xs[0].toFixed(2) + ' 出发，4 步收敛到 √2';
+          scene.layers[9].text = 'x: ' + xs[0].toFixed(3) + '→' + xs[1].toFixed(3) + '→' + xs[2].toFixed(3) + '→' + xs[3].toFixed(4);
         },
       },
 
@@ -204,6 +213,7 @@ $$e_{n+1} \\approx \\frac{f''(r)}{2f'(r)} \\, e_n^2 = C \\, e_n^2$$
           var logE = [];
           for (var j = 0; j < 5; j++) {
             var e = Math.abs(xs[j] - TRUE_ROOT);
+            // 保护:e=0 时 log10 为 -Infinity,用 -15 作下限
             logE.push(e > 1e-15 ? Math.log10(e) : -15);
           }
           // 5 个误差点

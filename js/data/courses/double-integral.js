@@ -66,6 +66,7 @@ $f < 0$ 时是"坑"在平面下方的体积（取负）。
         onControl: function (name, value, scene) {
           if (name !== 'n') return;
           var n = Math.round(value);
+          if (n < 1) n = 1; // 保护:n=0 会导致除零,网格至少 1×1
           // 在积分域 [-1.5,1.5]×[-1,1] 上画 n×n 网格点
           var pts = [];
           for (var i = 0; i <= n; i++) {

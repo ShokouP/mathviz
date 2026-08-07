@@ -107,8 +107,8 @@ $$[\\sin(x^2)]' = \\cos(x^2) \\cdot 2x$$
             { type: 'plot', fn: 'x^2', color: BLUE, lineWidth: 2, range: [-1.8, 2.2] },
             // 复合 sin(x^2)
             { type: 'plot', fn: 'sin(x^2)', color: GREEN, lineWidth: 2.5, range: [-1.8, 2.2] },
-            // 观察点：x 处的复合值
-            { type: 'point', x: 1.5, y: null, color: GREEN, radius: 5, label: 'sin(x²)' },
+            // 观察点：x 处的复合值（初始 x=1.5，sin(2.25)≈0.778）
+            { type: 'point', x: 1.5, y: 0.778, color: GREEN, radius: 5, label: 'sin(x²)' },
             // 内层点
             { type: 'point', x: 1.5, y: 2.25, color: BLUE, radius: 4, label: 'u=x²' },
             // 复合的切线
