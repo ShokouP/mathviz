@@ -101,6 +101,18 @@ $c = 1/2 \\in (0,+\\infty)$，故 $\\sum \\frac{1}{2n^2-1}$ 与 $\\sum \\frac{1}
           ].concat(buildCustomSeries(15, function (n) { return 1 / (2 * n * n - 1); }, BLUE))
             .concat(buildCustomSeries(15, function (n) { return 1 / (n * n); }, PURPLE)),
         },
+        controls: [
+          { name: 'N', label: '部分和项数 N', type: 'slider', min: 2, max: 40, step: 1, value: 15 },
+        ],
+        onControl: function (name, value, scene) {
+          if (name !== 'N') return;
+          var N = Math.round(value);
+          // 保留前 2 个图例文本，中间替换为两组点集
+          var legends = scene.layers.slice(0, 2);
+          scene.layers = legends
+            .concat(buildCustomSeries(N, function (n) { return 1 / (2 * n * n - 1); }, BLUE))
+            .concat(buildCustomSeries(N, function (n) { return 1 / (n * n); }, PURPLE));
+        },
       },
 
       // ===== Step 3：比值判别法（达朗贝尔） =====
@@ -197,6 +209,20 @@ $n$ 次幂让通项极快衰减——这正是根值法判断"收敛"的威力�
             .concat([
               { type: 'text', x: 6, y: 1.7, text: '蓝:Σ(n/(2n+1))ⁿ  ⁿ√aₙ→1/2<1 → 收敛', color: '#9aa7b4', fontSize: 11, align: 'left' },
             ]),
+        },
+        controls: [
+          { name: 'N', label: '部分和项数 N', type: 'slider', min: 2, max: 30, step: 1, value: 14 },
+        ],
+        onControl: function (name, value, scene) {
+          if (name !== 'N') return;
+          var N = Math.round(value);
+          // 保留前 2 层（极限线+文本），替换点集（末尾图例随之）
+          var head = scene.layers.slice(0, 2);
+          scene.layers = head
+            .concat(buildCustomSeries(N, function (n) { return Math.pow(n / (2 * n + 1), n); }, BLUE))
+            .concat([
+              { type: 'text', x: 6, y: 1.7, text: '蓝:Σ(n/(2n+1))ⁿ  ⁿ√aₙ→1/2<1 → 收敛', color: '#9aa7b4', fontSize: 11, align: 'left' },
+            ]);
         },
       },
     ],

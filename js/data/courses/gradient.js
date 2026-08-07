@@ -215,18 +215,38 @@ $\\alpha$ 是步长。当 $\\nabla f = 0$ 时停止——那是极值点（驻�
             { type: 'contour', fn: 'x^2 + y^2', levels: [0.3, 1, 3, 6, 10], nx: 70, ny: 60, color: PURPLE, lineWidth: 1, opacity: 0.5 },
             // 梯度场
             { type: 'vectorField', dx: '-2*x*0.3', dy: '-2*y*0.3', nx: 8, ny: 6, color: '#3a4452', lineWidth: 1 },
-            // 下降路径（从 (2.5,2) 到原点的折线，用多个 point + line）
-            { type: 'line', from: [2.5, 2], to: [2, 1.6], color: GREEN, lineWidth: 2.5 },
-            { type: 'line', from: [2, 1.6], to: [1.2, 0.96], color: GREEN, lineWidth: 2.5 },
-            { type: 'line', from: [1.2, 0.96], to: [0.48, 0.38], color: GREEN, lineWidth: 2.5 },
-            { type: 'line', from: [0.48, 0.38], to: [0, 0], color: GREEN, lineWidth: 2.5 },
+            // 下降路径（4 段折线，由 φ 滑块重算）
+            { type: 'line', from: [2.5, 0], to: [1.6, 0], color: GREEN, lineWidth: 2.5 },
+            { type: 'line', from: [1.6, 0], to: [0.96, 0], color: GREEN, lineWidth: 2.5 },
+            { type: 'line', from: [0.96, 0], to: [0.38, 0], color: GREEN, lineWidth: 2.5 },
+            { type: 'line', from: [0.38, 0], to: [0, 0], color: GREEN, lineWidth: 2.5 },
             // 起点
-            { type: 'point', x: 2.5, y: 2, color: ORANGE, radius: 5, label: '起点' },
+            { type: 'point', x: 2.5, y: 0, color: ORANGE, radius: 5, label: '起点' },
             // 终点（最小值）
             { type: 'point', x: 0, y: 0, color: BLUE, radius: 6, label: 'min f' },
             { type: 'text', x: -3.2, y: 2.7, text: '绿:最速下降路径  蓝:最小值点', color: '#9aa7b4', fontSize: 11, align: 'left' },
             { type: 'text', x: -3.2, y: 2.3, text: '沿 -∇f 走到 ∇f=0', color: GREEN, fontSize: 12, align: 'left' },
+            { type: 'text', x: -3.2, y: 1.9, text: '拖 φ 换起点：路径恒指向原点', color: '#9aa7b4', fontSize: 11, align: 'left' },
           ],
+        },
+        controls: [
+          { name: 'phi', label: '起点角度 φ', type: 'slider', min: 0, max: 6.28, step: 0.1, value: 0 },
+        ],
+        onControl: function (name, value, scene) {
+          if (name !== 'phi') return;
+          var r0 = 2.5;
+          // f=x²+y² 的 -∇f 径向指向原点，路径是直线，每步乘 (1-α)，取 α≈0.36
+          var decay = [0.64, 0.64 * 0.64, 0.64 * 0.64 * 0.64, 0.64 * 0.64 * 0.64 * 0.64];
+          var sx = r0 * Math.cos(value), sy = r0 * Math.sin(value);
+          // 4 段折线：依次衰减
+          var pts = [[sx, sy]];
+          for (var i = 0; i < 4; i++) pts.push([sx * decay[i], sy * decay[i]]);
+          scene.layers[2].from = pts[0]; scene.layers[2].to = pts[1];
+          scene.layers[3].from = pts[1]; scene.layers[3].to = pts[2];
+          scene.layers[4].from = pts[2]; scene.layers[4].to = pts[3];
+          scene.layers[5].from = pts[3]; scene.layers[5].to = pts[4];
+          scene.layers[6].x = sx; scene.layers[6].y = sy;
+          scene.layers[6].label = '起点(' + sx.toFixed(2) + ',' + sy.toFixed(2) + ')';
         },
       },
     ],

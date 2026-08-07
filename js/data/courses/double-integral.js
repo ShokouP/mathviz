@@ -210,17 +210,33 @@ $$\\int_0^{2\\pi}\\int_0^R r \\cdot r\\,dr\\,d\\theta = 2\\pi \\cdot \\frac{R^3}
             { type: 'parametric', fx: '1.0*cos(t)', fy: '1.0*sin(t)', tRange: [0, 6.2832], color: PURPLE, lineWidth: 1, opacity: 0.4 },
             // 积分域圆 r=1.5
             { type: 'parametric', fx: '1.5*cos(t)', fy: '1.5*sin(t)', tRange: [0, 6.2832], color: GREEN, lineWidth: 2.5 },
-            // 辐射线
-            { type: 'line', from: [0, 0], to: [1.5, 0], color: PURPLE, lineWidth: 1, opacity: 0.4 },
-            { type: 'line', from: [0, 0], to: [-1.5, 0], color: PURPLE, lineWidth: 1, opacity: 0.4 },
-            { type: 'line', from: [0, 0], to: [0, 1.5], color: PURPLE, lineWidth: 1, opacity: 0.4 },
-            { type: 'line', from: [0, 0], to: [0, -1.5], color: PURPLE, lineWidth: 1, opacity: 0.4 },
+            // 当前扫描的辐射线（由 θ 滑块控制）
+            { type: 'line', from: [0, 0], to: [1.5, 0], color: ORANGE, lineWidth: 2.5 },
+            // 当前辐射线外端点
+            { type: 'point', x: 1.5, y: 0, color: ORANGE, radius: 5, label: 'r=1.5' },
             // 标注
             { type: 'point', x: 0, y: 0, color: ORANGE, radius: 3 },
             { type: 'text', x: 1.6, y: 0.2, text: 'r=1.5', color: GREEN, fontSize: 11 },
             { type: 'text', x: -2.3, y: 1.7, text: 'dA = r·dr·dθ（注意多一个r）', color: '#9aa7b4', fontSize: 11, align: 'left' },
-            { type: 'text', x: -2.3, y: 1.3, text: '圆形域用极坐标极简', color: GREEN, fontSize: 12, align: 'left' },
+            { type: 'text', x: -2.3, y: 1.3, text: 'θ=0.00  扫描圆域：先 r 后 θ', color: GREEN, fontSize: 12, align: 'left' },
           ],
+        },
+        controls: [
+          { name: 'theta', label: '扫描角度 θ', type: 'slider', min: 0, max: 6.28, step: 0.05, value: 0 },
+        ],
+        onControl: function (name, value, scene) {
+          if (name !== 'theta') return;
+          var th = value;
+          var R = 1.5;
+          var ex = R * Math.cos(th), ey = R * Math.sin(th);
+          // 当前辐射线
+          scene.layers[3].to = [ex, ey];
+          scene.layers[4].x = ex;
+          scene.layers[4].y = ey;
+          scene.layers[4].label = 'r=' + R + ' θ=' + th.toFixed(2);
+          // 此辐射线上的微元累积：∫₀ᴿ r·dr = R²/2（每条辐射贡献的"面积积分"）
+          var rayContrib = R * R / 2;
+          scene.layers[7].text = 'θ=' + th.toFixed(2) + '（' + (th * 180 / Math.PI).toFixed(0) + '°）  此射线面积微元和=' + rayContrib.toFixed(3);
         },
       },
     ],

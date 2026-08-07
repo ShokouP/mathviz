@@ -50,12 +50,30 @@
             { type: 'contour', fn: 'x*y', levels: [-1, -0.5, 0.5, 1], nx: 80, ny: 80, color: BLUE, lineWidth: 1.2, opacity: 0.5 },
             // 约束 x²+y²=1
             { type: 'parametric', fx: 'cos(t)', fy: 'sin(t)', tRange: [0, 6.2832], color: ORANGE, lineWidth: 2.5 },
+            // 当前观察点（在圆上移动）
+            { type: 'point', x: 0.707, y: 0.707, color: GREEN, radius: 5, label: 'P' },
             // 极值点（±1/√2, ±1/√2）
             { type: 'point', x: 0.707, y: 0.707, color: PURPLE, radius: 6, label: 'max' },
             { type: 'point', x: -0.707, y: -0.707, color: PURPLE, radius: 6, label: 'max' },
             { type: 'text', x: -1.8, y: 1.7, text: '蓝:f=xy等高线  橙:约束圆', color: '#9aa7b4', fontSize: 11, align: 'left' },
             { type: 'text', x: -1.8, y: 1.3, text: '相切点 = 条件极值', color: GREEN, fontSize: 12, align: 'left' },
+            { type: 'text', x: -1.8, y: 0.9, text: '拖 θ 看 f 值变化', color: '#9aa7b4', fontSize: 11, align: 'left' },
           ],
+        },
+        controls: [
+          { name: 'theta', label: '圆上角度 θ', type: 'slider', min: 0, max: 6.28, step: 0.05, value: 0.785 },
+        ],
+        onControl: function (name, value, scene) {
+          if (name !== 'theta') return;
+          var px = Math.cos(value), py = Math.sin(value);
+          // 观察点
+          scene.layers[2].x = px; scene.layers[2].y = py;
+          var fv = px * py;
+          // 判断是否接近相切点(±1/√2)
+          var atTangent = Math.abs(Math.abs(px) - 0.707) < 0.08 && Math.abs(Math.abs(py) - 0.707) < 0.08;
+          scene.layers[5].color = atTangent ? GREEN : '#9aa7b4';
+          scene.layers[5].text = atTangent ? '相切处 f 最大 = 1/2 ✓' : '相切点 = 条件极值';
+          scene.layers[7].text = 'θ=' + value.toFixed(2) + '  P=(' + px.toFixed(2) + ',' + py.toFixed(2) + ')  f=xy=' + fv.toFixed(3);
         },
       },
 
@@ -152,7 +170,28 @@ $$\\lambda = \\frac{d f^*}{d c}$$
             { type: 'point', x: 0.919, y: 0.919, color: PURPLE, radius: 4, label: 'r=1.3' },
             { type: 'text', x: -2.3, y: 1.7, text: 'f*=r²/2，λ=df*/dc=r/2=0.5', color: GREEN, fontSize: 12, align: 'left' },
             { type: 'text', x: -2.3, y: 1.3, text: '约束放松 → 最优值增大', color: '#9aa7b4', fontSize: 11, align: 'left' },
+            { type: 'text', x: -2.3, y: 0.9, text: '拖 r 看当前 λ', color: '#9aa7b4', fontSize: 11, align: 'left' },
           ],
+        },
+        controls: [
+          { name: 'r', label: '约束半径 r', type: 'slider', min: 0.4, max: 1.6, step: 0.05, value: 1.0 },
+        ],
+        onControl: function (name, value, scene) {
+          if (name !== 'r') return;
+          var r = value;
+          // 当前活动圆高亮为橙色,其它两圆灰化(保持三个参考半径不动,只重画"当前 r"对应的圆与最优点)
+          // 用 layers[2] 的位置表达当前 r:把第三个 parametric 改成当前半径,并放最优点
+          // 但为保持"三个固定圆"的视觉对照,这里改为更新 layers[5](当前活动最优点)+ 文字
+          // 当前活动点坐标:r/√2 处
+          var p = r / Math.SQRT2;
+          scene.layers[5].x = p; scene.layers[5].y = p;
+          scene.layers[5].color = GREEN;
+          scene.layers[5].radius = 6;
+          scene.layers[5].label = 'r=' + r.toFixed(2);
+          // λ = r/2,f* = r²/2
+          var lambda = r / 2;
+          var fstar = r * r / 2;
+          scene.layers[6].text = '当前 r=' + r.toFixed(2) + '：f*=' + fstar.toFixed(3) + '，λ=r/2=' + lambda.toFixed(3);
         },
       },
 
@@ -177,19 +216,39 @@ $$\\lambda = \\frac{d f^*}{d c}$$
 > 拉格朗日乘数法把"几何直觉（垂线最短）"变成了"代数程序（解方程组）"。`,
 
         scene: {
-          axes: { xRange: [-1, 5], yRange: [-1, 5] },
+          axes: { xRange: [-1, 6], yRange: [-1, 6] },
           layers: [
             // 距离等高线（同心圆）
-            { type: 'contour', fn: 'x^2 + y^2', levels: [2, 4, 8, 12, 16], nx: 80, ny: 80, color: BLUE, lineWidth: 1.2, opacity: 0.5 },
-            // 约束直线 x+y=4
+            { type: 'contour', fn: 'x^2 + y^2', levels: [2, 4, 8, 12, 16, 20], nx: 80, ny: 80, color: BLUE, lineWidth: 1.2, opacity: 0.5 },
+            // 约束直线 x+y=c（默认 c=4）
             { type: 'line', from: [0, 4], to: [4, 0], color: ORANGE, lineWidth: 2.5 },
-            // 最优点 (2,2)
+            // 最优点 (c/2, c/2)
             { type: 'point', x: 2, y: 2, color: PURPLE, radius: 6, label: '(2,2) d=2√2' },
             // 原点到最优点
             { type: 'line', from: [0, 0], to: [2, 2], color: GREEN, lineWidth: 2 },
-            { type: 'text', x: -0.8, y: 4.5, text: '蓝:距离等高线  橙:约束 x+y=4', color: '#9aa7b4', fontSize: 11, align: 'left' },
-            { type: 'text', x: -0.8, y: 4, text: '相切点(2,2) = 最短距离点', color: GREEN, fontSize: 12, align: 'left' },
+            { type: 'text', x: -0.8, y: 5.5, text: '蓝:距离等高线  橙:约束 x+y=c', color: '#9aa7b4', fontSize: 11, align: 'left' },
+            { type: 'text', x: -0.8, y: 5, text: '相切点(c/2,c/2) = 最短距离点', color: GREEN, fontSize: 12, align: 'left' },
+            { type: 'text', x: -0.8, y: 4.5, text: '拖 c 看切点与距离变化', color: '#9aa7b4', fontSize: 11, align: 'left' },
           ],
+        },
+        controls: [
+          { name: 'c', label: '约束常数 c（直线 x+y=c）', type: 'slider', min: 1, max: 8, step: 0.1, value: 4 },
+        ],
+        onControl: function (name, value, scene) {
+          if (name !== 'c') return;
+          var c = value;
+          // 约束直线从 (0,c) 到 (c,0)
+          scene.layers[1].from = [0, c];
+          scene.layers[1].to = [c, 0];
+          // 最优点 (c/2, c/2)
+          var px = c / 2, py = c / 2;
+          scene.layers[2].x = px; scene.layers[2].y = py;
+          scene.layers[2].label = '(' + px.toFixed(2) + ',' + py.toFixed(2) + ')';
+          // 原点到最优点
+          scene.layers[3].to = [px, py];
+          // 距离 = √(c²/2) = c/√2
+          var d = c / Math.SQRT2;
+          scene.layers[5].text = '切点(' + px.toFixed(2) + ',' + py.toFixed(2) + ')  距离=' + d.toFixed(3);
         },
       },
     ],

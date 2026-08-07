@@ -220,7 +220,7 @@ $f''<0$ 是"开口朝下"的拱，驻点自然是拱顶（极大）。
             { type: 'plot', fn: '2*x^3 - 9*x^2 + 12*x - 3', color: BLUE, lineWidth: 2.8, range: [0, 3], samples: 120 },
             // x 轴
             { type: 'line', from: [-0.5, 0], to: [3.5, 0], color: '#3a4452', lineWidth: 1 },
-            // 区间端点竖线（标记 [0,3]）
+            // 区间端点竖线（标记 [0,b]，b 由滑块控制）
             { type: 'line', from: [0, -4], to: [0, 7], color: '#3a4452', lineWidth: 1, dashed: true },
             { type: 'line', from: [3, -4], to: [3, 7], color: '#3a4452', lineWidth: 1, dashed: true },
             // 四个候选点：端点 + 驻点
@@ -233,6 +233,46 @@ $f''<0$ 是"开口朝下"的拱，驻点自然是拱顶（极大）。
             { type: 'text', x: 1.5, y: 6.6, text: '全局最大在端点 x=3', color: GREEN, fontSize: 12, align: 'center' },
             { type: 'text', x: -0.4, y: -3.5, text: '蓝:f=2x³−9x²+12x−3，区间 [0,3]', color: '#9aa7b4', fontSize: 11, align: 'left' },
           ],
+        },
+        controls: [
+          { name: 'b', label: '区间右端点 b', type: 'slider', min: 0.5, max: 3, step: 0.05, value: 3 },
+        ],
+        onControl: function (name, value, scene) {
+          if (name !== 'b') return;
+          var b = value;
+          // f(x)=2x³-9x²+12x-3
+          function f(t) { return 2 * t * t * t - 9 * t * t + 12 * t - 3; }
+          // 曲线只在 [0,b] 上画
+          scene.layers[0].range = [0, b];
+          // 右端点竖线
+          scene.layers[3].from = [b, -4];
+          scene.layers[3].to = [b, 7];
+          // 候选值：f(0)、若 b>1 则 f(1)、若 b>2 则 f(2)、f(b)。重画候选点 + 找最大
+          var cands = [{ x: 0, y: f(0), tag: 'f(0)' }];
+          if (b >= 1) cands.push({ x: 1, y: f(1), tag: '驻点 f(1)' });
+          if (b >= 2) cands.push({ x: 2, y: f(2), tag: '驻点 f(2)' });
+          cands.push({ x: b, y: f(b), tag: '端点 f(b)' });
+          // 最大值
+          var maxIdx = 0;
+          for (var i = 1; i < cands.length; i++) { if (cands[i].y > cands[maxIdx].y) maxIdx = i; }
+          // 重设四个点层(layers[4..7])：先把驻点按是否在区间内显示，端点跟随 b
+          // layers[4]=f(0), [5]=f(1), [6]=f(2), [7]=端点 f(b)
+          scene.layers[7].x = b;
+          scene.layers[7].y = f(b);
+          scene.layers[7].label = '端点 f(' + b.toFixed(2) + ')=' + f(b).toFixed(2);
+          scene.layers[7].color = maxIdx === cands.length - 1 ? GREEN : ORANGE;
+          scene.layers[7].radius = maxIdx === cands.length - 1 ? 7 : 5;
+          // 驻点 f(1)、f(2) 颜色(在区间内才标绿)
+          scene.layers[5].color = (b >= 1 && maxIdx === 1) ? GREEN : ORANGE;
+          scene.layers[5].radius = (b >= 1 && maxIdx === 1) ? 7 : 5;
+          scene.layers[6].color = (b >= 2 && maxIdx === 2) ? GREEN : ORANGE;
+          scene.layers[6].radius = (b >= 2 && maxIdx === 2) ? 7 : 5;
+          // 全局最大水平线
+          var maxY = cands[maxIdx].y;
+          scene.layers[8].from = [-0.5, maxY];
+          scene.layers[8].to = [3.5, maxY];
+          scene.layers[9].text = '全局最大 = ' + maxY.toFixed(2) + '（在 ' + cands[maxIdx].tag + '）';
+          scene.layers[10].text = '蓝:f=2x³−9x²+12x−3，区间 [0,' + b.toFixed(2) + ']';
         },
       },
     ],

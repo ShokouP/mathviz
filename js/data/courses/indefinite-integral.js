@@ -196,10 +196,28 @@ $$\\int u\\,dv = uv - \\int v\\,du$$
             { type: 'plot', fn: 'x*exp(x)', color: GREEN, lineWidth: 2, range: [-0.3, 2.8], samples: 80 },
             // 减去的 e^x
             { type: 'plot', fn: 'exp(x)', color: ORANGE, lineWidth: 1.8, range: [-0.3, 2.8], samples: 80 },
-            { type: 'point', x: 2, y: 7.389, color: BLUE, radius: 4, label: 'F=(x-1)eˣ' },
+            // 观察竖线
+            { type: 'line', from: [1.5, -2], to: [1.5, 12], color: '#9aa7b4', dashed: true, lineWidth: 1 },
+            { type: 'point', x: 1.5, y: 1.2233, color: BLUE, radius: 4, label: 'F=(x-1)eˣ' },
             { type: 'text', x: 1.5, y: 11, text: '蓝:F=(x-1)eˣ  绿:xeˣ  橙:eˣ', color: '#9aa7b4', fontSize: 11, align: 'left' },
-            { type: 'text', x: 0.2, y: 11, text: 'F′ = xeˣ ✓', color: GREEN, fontSize: 12, align: 'left' },
+            { type: 'text', x: 0.2, y: 11, text: 'F′(1.5)=1.5e^1.5≈6.72 = xeˣ ✓', color: GREEN, fontSize: 12, align: 'left' },
           ],
+        },
+        controls: [
+          { name: 'x', label: '观察点 x（验证 F′=xeˣ）', type: 'slider', min: -0.2, max: 2.7, step: 0.05, value: 1.5 },
+        ],
+        onControl: function (name, value, scene) {
+          if (name !== 'x') return;
+          var x = value;
+          scene.layers[3].from = [x, -2];
+          scene.layers[3].to = [x, 12];
+          // F(x) = (x-1)e^x
+          var F = (x - 1) * Math.exp(x);
+          scene.layers[4].x = x;
+          scene.layers[4].y = F;
+          // 数值导数：F'(x) = x e^x
+          var Fp = x * Math.exp(x);
+          scene.layers[6].text = 'F(' + x.toFixed(2) + ')=' + F.toFixed(2) + '，F′=' + Fp.toFixed(2) + '（=xeˣ ✓）';
         },
       },
     ],

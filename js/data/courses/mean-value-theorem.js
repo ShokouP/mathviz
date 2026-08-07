@@ -213,7 +213,25 @@ $$f(b) - f(a) = f'(\\xi)(b-a), \\quad |f'(\\xi)| \\leq M$$
             { type: 'tangent', fn: 'sin(x)', at: 1.65, color: GREEN, dashed: false, halfLen: 1, lineWidth: 2 },
             { type: 'point', x: 1.65, y: 0.997, color: GREEN, radius: 5, label: 'ξ' },
             { type: 'text', x: 2, y: 1.7, text: '|Δf| ≤ |b-a|（因 |cos|≤1）', color: '#9aa7b4', fontSize: 12, align: 'left' },
+            { type: 'text', x: -0.9, y: 1.7, text: '拖 ξ 找切线∥割线之点', color: '#9aa7b4', fontSize: 11, align: 'left' },
           ],
+        },
+        controls: [
+          { name: 'xi', label: 'ξ 位置', type: 'slider', min: 0.6, max: 2.7, step: 0.02, value: 1.65 },
+        ],
+        onControl: function (name, value, scene) {
+          if (name !== 'xi') return;
+          scene.layers[4].at = value;
+          scene.layers[5].x = value;
+          scene.layers[5].y = Math.sin(value);
+          // 割线斜率 = (sin(2.8)-sin(0.5))/(2.8-0.5)
+          var secSlope = (Math.sin(2.8) - Math.sin(0.5)) / (2.8 - 0.5);
+          var tanSlope = Math.cos(value); // f'(ξ)=cos ξ
+          var parallel = Math.abs(tanSlope - secSlope) < 0.05;
+          scene.layers[5].label = 'ξ=' + value.toFixed(2);
+          scene.layers[5].color = parallel ? GREEN : ORANGE;
+          scene.layers[7].text = parallel ? '✓ 切线∥割线（cos ξ=割线斜率）' : '拖 ξ 使切线与割线平行';
+          scene.layers[7].color = parallel ? GREEN : '#9aa7b4';
         },
       },
     ],

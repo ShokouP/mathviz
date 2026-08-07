@@ -64,9 +64,29 @@
             // 起点和终点标记
             { type: 'point', x: 0, y: 0, color: GREEN, label: '出发' },
             { type: 'point', x: 9.5, y: 7.2, color: BLUE, label: '到达' },
+            // 当前时刻的车（沿曲线移动）
+            { type: 'point', x: 4, y: 1.28, color: PURPLE, radius: 6, label: '此刻' },
+            // 竖线投影到 x 轴
+            { type: 'line', from: [4, 0], to: [4, 1.28], color: PURPLE, dashed: true, lineWidth: 1 },
             { type: 'text', x: 7, y: -0.3, text: '时间 →', color: '#9aa7b4', fontSize: 13 },
             { type: 'text', x: -0.3, y: 6, text: '位置', color: '#9aa7b4', fontSize: 13 },
+            { type: 'text', x: 4.3, y: 2, text: 't=4.0  位置=1.28', color: PURPLE, fontSize: 12, align: 'left' },
           ],
+        },
+        controls: [
+          { name: 't', label: '时间 t（让车开起来）', type: 'slider', min: 0, max: 9.5, step: 0.1, value: 4 },
+        ],
+        onControl: function (name, value, scene) {
+          if (name !== 't') return;
+          var t = value;
+          var pos = 0.08 * t * t;
+          scene.layers[2].x = t;
+          scene.layers[2].y = pos;
+          scene.layers[3].from = [t, 0];
+          scene.layers[3].to = [t, pos];
+          // 速度 = 导数 = 0.16t，越开越快（曲线越往后越陡）
+          var v = 0.16 * t;
+          scene.layers[6].text = 't=' + t.toFixed(1) + '  位置=' + pos.toFixed(2) + '  此刻速度≈' + v.toFixed(2);
         },
       },
 

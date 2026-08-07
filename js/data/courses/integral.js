@@ -66,9 +66,22 @@
             { type: 'riemann', fn: 'x^2', range: [0, 2], n: 4, mode: 'mid' },
             { type: 'plot', fn: 'x^2', color: '#4f9cf9', lineWidth: 2.5, range: [0, 2.4], samples: 200 },
             { type: 'point', x: 2, y: 4, radius: 4, color: '#ff8c42', label: '(2, 4)' },
+            { type: 'text', x: 0.05, y: 4.2, text: '绿:黎曼矩形  蓝:f(x)=x²', color: '#9aa7b4', fontSize: 11, align: 'left' },
+            { type: 'text', x: 0.05, y: 3.8, text: 'n=4：粗略逼近', color: '#4ade80', fontSize: 12, align: 'left' },
           ],
         },
-        controls: [],
+        controls: [
+          { name: 'n', label: '矩形数 n', type: 'slider', min: 1, max: 60, step: 1, value: 4, bind: 'layers.0.n' },
+        ],
+        onControl: function (name, value, scene) {
+          if (name !== 'n') return;
+          var n = Math.round(value);
+          // 黎曼和(中点)数值估算:Σ f(中点)·Δx
+          var a = 0, b = 2, dx = (b - a) / n, sum = 0;
+          for (var i = 0; i < n; i++) { var mid = a + (i + 0.5) * dx; sum += mid * mid * dx; }
+          var exact = 8 / 3;
+          scene.layers[4].text = 'n=' + n + '：黎曼和≈' + sum.toFixed(3) + '（真值 ' + exact.toFixed(3) + '）';
+        },
       },
 
       // -----------------------------------------------------------------
@@ -98,6 +111,8 @@
           layers: [
             { type: 'riemann', fn: 'x^2', range: [0, 2], n: 8, mode: 'mid' },
             { type: 'plot', fn: 'x^2', color: '#4f9cf9', lineWidth: 2.5, range: [0, 2.4], samples: 200 },
+            { type: 'text', x: 0.05, y: 4.2, text: '绿:黎曼矩形  蓝:f(x)=x²', color: '#9aa7b4', fontSize: 11, align: 'left' },
+            { type: 'text', x: 0.05, y: 3.8, text: '拖 n 看缝隙消失', color: '#4ade80', fontSize: 12, align: 'left' },
           ],
         },
         controls: [
@@ -112,6 +127,14 @@
             bind: 'layers.0.n',
           },
         ],
+        onControl: function (name, value, scene) {
+          if (name !== 'n') return;
+          var n = Math.round(value);
+          var a = 0, b = 2, dx = (b - a) / n, sum = 0;
+          for (var i = 0; i < n; i++) { var mid = a + (i + 0.5) * dx; sum += mid * mid * dx; }
+          var exact = 8 / 3;
+          scene.layers[3].text = 'n=' + n + '：黎曼和≈' + sum.toFixed(4) + '（真值 ' + exact.toFixed(4) + '）';
+        },
       },
 
       // -----------------------------------------------------------------
@@ -138,6 +161,8 @@
           layers: [
             { type: 'riemann', fn: 'x^2', range: [0, 2], n: 8, mode: 'mid' },
             { type: 'plot', fn: 'x^2', color: '#4f9cf9', lineWidth: 2.5, range: [0, 2.4], samples: 200 },
+            { type: 'text', x: 0.05, y: 4.2, text: '绿:黎曼矩形  蓝:f(x)=x²', color: '#9aa7b4', fontSize: 11, align: 'left' },
+            { type: 'text', x: 0.05, y: 3.8, text: '当前:中点法（最精确）', color: '#4ade80', fontSize: 12, align: 'left' },
           ],
         },
         controls: [
@@ -162,12 +187,30 @@
           },
         ],
 
-        // mode 滑块输出整数 0/1/2，这里映射为引擎所需的字符串
+        // mode 滑块输出整数 0/1/2，这里映射为引擎所需的字符串；n 用 bind 直写 layers.0.n
         onControl: function (name, value, scene) {
-          if (name !== 'mode') return;
+          // 只在 mode 改变时重算文字（n 改变时也顺带刷新当前模式的黎曼和）
           var modes = ['left', 'right', 'mid'];
-          if (scene.layers && scene.layers[0]) {
-            scene.layers[0].mode = modes[Math.round(value)] || 'mid';
+          var names = ['左端点法（低估）', '右端点法（高估）', '中点法（最精确）'];
+          // 当前 mode/n 值（从 scene.layers[0] 读实际状态，避免依赖入参顺序）
+          var modeIdx = scene.layers && scene.layers[0] ? modes.indexOf(scene.layers[0].mode) : 2;
+          if (name === 'mode') {
+            modeIdx = Math.round(value);
+            if (scene.layers && scene.layers[0]) {
+              scene.layers[0].mode = modes[modeIdx] || 'mid';
+            }
+          }
+          // 数值估算当前黎曼和
+          var n = scene.layers && scene.layers[0] ? (scene.layers[0].n || 8) : 8;
+          var a = 0, b = 2, dx = (b - a) / n, sum = 0;
+          for (var i = 0; i < n; i++) {
+            var t = a + (i + (modes[modeIdx] === 'left' ? 0 : modes[modeIdx] === 'right' ? 1 : 0.5)) * dx;
+            sum += t * t * dx;
+          }
+          var exact = 8 / 3;
+          if (scene.layers[3]) {
+            scene.layers[3].text = names[modeIdx] + '：R≈' + sum.toFixed(3) + '（真值 ' + exact.toFixed(3) + '）';
+            scene.layers[3].color = modeIdx === 2 ? '#4ade80' : '#ff8c42';
           }
         },
       },
@@ -218,9 +261,30 @@
               color: '#9aa7b4',
               fontSize: 12,
             },
+            {
+              type: 'text',
+              x: 0.05,
+              y: 4.3,
+              text: '拖 n 看黎曼和收敛到 8/3',
+              color: '#9aa7b4',
+              fontSize: 11,
+              align: 'left',
+            },
           ],
         },
-        controls: [],
+        controls: [
+          { name: 'n', label: '矩形数 n（推向无穷）', type: 'slider', min: 1, max: 400, step: 1, value: 200, bind: 'layers.0.n' },
+        ],
+        onControl: function (name, value, scene) {
+          if (name !== 'n') return;
+          var n = Math.round(value);
+          var a = 0, b = 2, dx = (b - a) / n, sum = 0;
+          for (var i = 0; i < n; i++) { var mid = a + (i + 0.5) * dx; sum += mid * mid * dx; }
+          var exact = 8 / 3;
+          var gap = Math.abs(sum - exact);
+          scene.layers[2].text = 'n=' + n + '：黎曼和≈' + sum.toFixed(4) + '，误差≈' + gap.toFixed(4);
+          scene.layers[2].color = gap < 0.001 ? '#4ade80' : '#ff8c42';
+        },
       },
     ],
   };

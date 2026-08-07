@@ -150,9 +150,23 @@ $x^4$ 在原点只是"平坦了一下"，弯曲方向没变。
             { type: 'point', x: 0, y: 0, color: GREEN, radius: 6, label: 'x³ 的拐点' },
             // 参照线
             { type: 'line', from: [-1.8, 0], to: [1.8, 0], color: '#3a4452', lineWidth: 1 },
+            // 观察竖线
+            { type: 'line', from: [0.8, -3], to: [0.8, 5], color: PURPLE, dashed: true, lineWidth: 1 },
             { type: 'text', x: -1.6, y: 4.2, text: '蓝:x³（有拐点）  橙:x⁴（无拐点）', color: '#9aa7b4', fontSize: 11, align: 'left' },
-            { type: 'text', x: -1.6, y: 3.5, text: 'x³ 在原点凹凸反转；x⁴ 始终凹', color: GREEN, fontSize: 11, align: 'left' },
+            { type: 'text', x: -1.6, y: 3.5, text: 'x³：f″=6x 变号；x⁴：f″=12x²≥0 不变号', color: GREEN, fontSize: 11, align: 'left' },
+            { type: 'text', x: -1.6, y: 2.8, text: 'x=0.8：x³ 的 f″=4.80，x⁴ 的 f″=7.68', color: PURPLE, fontSize: 11, align: 'left' },
           ],
+        },
+        controls: [
+          { name: 'x', label: '观察点 x', type: 'slider', min: -1.4, max: 1.4, step: 0.05, value: 0.8 },
+        ],
+        onControl: function (name, value, scene) {
+          if (name !== 'x') return;
+          scene.layers[4].from = [value, -3];
+          scene.layers[4].to = [value, 5];
+          var f3pp = 6 * value;       // (x³)″
+          var f4pp = 12 * value * value; // (x⁴)″
+          scene.layers[7].text = 'x=' + value.toFixed(2) + '：x³ 的 f″=' + f3pp.toFixed(2) + '，x⁴ 的 f″=' + f4pp.toFixed(2);
         },
       },
 
@@ -186,7 +200,7 @@ $$f\\!\\left(\\frac{x_1 + x_2}{2}\\right) \\leq \\frac{f(x_1) + f(x_2)}{2}$$
           layers: [
             // f = x²（凹）
             { type: 'plot', fn: 'x^2', color: BLUE, lineWidth: 2.5, range: [-1.5, 1.5], samples: 60 },
-            // 割线 (-1,1) 到 (1,1)
+            // 割线 (-a, a²) 到 (a, a²)，a 由滑块控制
             { type: 'line', from: [-1, 1], to: [1, 1], color: ORANGE, lineWidth: 2 },
             // 端点
             { type: 'point', x: -1, y: 1, color: ORANGE, radius: 4 },
@@ -199,6 +213,26 @@ $$f\\!\\left(\\frac{x_1 + x_2}{2}\\right) \\leq \\frac{f(x_1) + f(x_2)}{2}$$
             { type: 'text', x: -1.6, y: 2.2, text: '蓝:f=x²（凹）  橙:割线', color: '#9aa7b4', fontSize: 11, align: 'left' },
             { type: 'text', x: 0.2, y: 0.5, text: 'f(中点) ≤ 割线中点（詹森）', color: GREEN, fontSize: 11, align: 'left' },
           ],
+        },
+        controls: [
+          { name: 'a', label: '割线半宽 a（端点 ±a）', type: 'slider', min: 0.3, max: 1.5, step: 0.05, value: 1 },
+        ],
+        onControl: function (name, value, scene) {
+          if (name !== 'a') return;
+          var a = value;
+          var fa = a * a; // f(±a)=a²
+          // 割线两端
+          scene.layers[1].from = [-a, fa];
+          scene.layers[1].to = [a, fa];
+          scene.layers[2].x = -a; scene.layers[2].y = fa;
+          scene.layers[3].x = a; scene.layers[3].y = fa;
+          // 中点割线值 = a²（f(中点)=f(0)=0 恒定）
+          scene.layers[5].y = fa;
+          scene.layers[5].label = '割线中点=' + fa.toFixed(2);
+          scene.layers[6].from = [0, 0];
+          scene.layers[6].to = [0, fa];
+          // 验证詹森：0 ≤ a² 恒成立
+          scene.layers[8].text = 'f(0)=0 ≤ 割线中点=' + fa.toFixed(2) + '（差 ' + fa.toFixed(2) + '）';
         },
       },
     ],

@@ -143,13 +143,33 @@ $$\\frac{\\partial f}{\\partial x} = y\\,e^{xy}, \\qquad \\frac{\\partial f}{\\p
             { type: 'contour', fn: 'x^2 - y^2', levels: [-4, -2, -1, 1, 2, 4], nx: 80, ny: 80, color: PURPLE, lineWidth: 1.2, opacity: 0.6 },
             // 观察点
             { type: 'point', x: 1.2, y: 0.8, color: ORANGE, radius: 5, label: 'P' },
-            // ∂f/∂x 方向箭头（沿 x 正方向）
+            // ∂f/∂x 方向箭头（沿 x 正方向，长度随 |2x|）
             { type: 'line', from: [1.2, 0.8], to: [2.2, 0.8], color: ORANGE, lineWidth: 2 },
             // ∂f/∂y 方向箭头（沿 y 负方向，因 ∂f/∂y=-2y<0）
             { type: 'line', from: [1.2, 0.8], to: [1.2, -0.2], color: BLUE, lineWidth: 2 },
             { type: 'text', x: -2.8, y: 2.7, text: '橙:∂f/∂x 方向  蓝:∂f/∂y 方向', color: '#9aa7b4', fontSize: 11, align: 'left' },
-            { type: 'text', x: -2.8, y: 2.3, text: '马鞍面 f=x²-y² 等高线', color: PURPLE, fontSize: 11, align: 'left' },
+            { type: 'text', x: -2.8, y: 2.3, text: '马鞍面 f=x²-y²：∂f/∂x=2x=2.40  ∂f/∂y=-2y=-1.60', color: GREEN, fontSize: 11, align: 'left' },
+            { type: 'text', x: -2.8, y: 1.9, text: '拖 x₀/y₀ 看偏导值变化', color: '#9aa7b4', fontSize: 11, align: 'left' },
           ],
+        },
+        controls: [
+          { name: 'x0', label: '观察点 x₀', type: 'slider', min: -2.5, max: 2.5, step: 0.1, value: 1.2 },
+          { name: 'y0', label: '观察点 y₀', type: 'slider', min: -2.5, max: 2.5, step: 0.1, value: 0.8 },
+        ],
+        onControl: function (name, value, scene) {
+          var px = name === 'x0' ? value : scene.layers[1].x;
+          var py = name === 'y0' ? value : scene.layers[1].y;
+          scene.layers[1].x = px; scene.layers[1].y = py;
+          // f=x²-y²：∂f/∂x=2x，∂f/∂y=-2y。箭头方向带符号(负则反向)
+          var dfx = 2 * px, dfy = -2 * py;
+          // 箭头长度按偏导值缩放(限幅)，方向由符号决定
+          var lenX = Math.max(-1.2, Math.min(1.2, dfx * 0.4));
+          var lenY = Math.max(-1.2, Math.min(1.2, dfy * 0.4));
+          scene.layers[2].from = [px, py];
+          scene.layers[2].to = [px + lenX, py];
+          scene.layers[3].from = [px, py];
+          scene.layers[3].to = [px, py + lenY];
+          scene.layers[5].text = '马鞍面 f=x²-y²：∂f/∂x=2x=' + dfx.toFixed(2) + '  ∂f/∂y=-2y=' + dfy.toFixed(2);
         },
       },
 
@@ -183,8 +203,24 @@ $$\\frac{\\partial^2 f}{\\partial x\\,\\partial y} = \\frac{\\partial^2 f}{\\par
             { type: 'contour', fn: 'x^2 * y^2', levels: [0.2, 0.8, 2, 4, 8], nx: 80, ny: 80, color: PURPLE, lineWidth: 1.2, opacity: 0.6 },
             { type: 'point', x: 1, y: 1, color: ORANGE, radius: 5, label: 'P' },
             { type: 'text', x: -2.8, y: 2.7, text: 'f=x²y² 等高线', color: PURPLE, fontSize: 11, align: 'left' },
-            { type: 'text', x: -2.8, y: 2.3, text: 'fₓᵧ = fᵧₓ = 6xy²（克莱罗）', color: GREEN, fontSize: 12, align: 'left' },
+            { type: 'text', x: -2.8, y: 2.3, text: 'fₓᵧ = fᵧₓ = 6xy² = 6.00（克莱罗成立 ✓）', color: GREEN, fontSize: 12, align: 'left' },
+            { type: 'text', x: -2.8, y: 1.9, text: '拖 x₀/y₀ 验证两混合偏导恒等', color: '#9aa7b4', fontSize: 11, align: 'left' },
           ],
+        },
+        controls: [
+          { name: 'x0', label: '观察点 x₀', type: 'slider', min: -2, max: 2, step: 0.1, value: 1 },
+          { name: 'y0', label: '观察点 y₀', type: 'slider', min: -2, max: 2, step: 0.1, value: 1 },
+        ],
+        onControl: function (name, value, scene) {
+          var px = name === 'x0' ? value : scene.layers[1].x;
+          var py = name === 'y0' ? value : scene.layers[1].y;
+          scene.layers[1].x = px; scene.layers[1].y = py;
+          // f=x²y²：fₓ=2xy²，fₓᵧ=6xy²；fᵧ=2x²y，fᵧₓ=6xy² → 恒等
+          var fxy = 6 * px * py * py;
+          var fyx = 6 * px * py * py;
+          var equal = Math.abs(fxy - fyx) < 1e-9;
+          scene.layers[3].text = 'fₓᵧ=' + fxy.toFixed(2) + '，fᵧₓ=' + fyx.toFixed(2) + (equal ? '（克莱罗成立 ✓）' : '（不等 ✗）');
+          scene.layers[3].color = equal ? GREEN : ORANGE;
         },
       },
     ],

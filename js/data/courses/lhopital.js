@@ -102,9 +102,30 @@ $$\\lim_{x \\to a} \\frac{f(x)}{g(x)} = \\lim_{x \\to a} \\frac{f'(x)}{g'(x)}$$
             { type: 'plot', fn: 'exp(x)/2', color: PURPLE, lineWidth: 1.8, range: [-0.95, 1.8], samples: 60 },
             // 极限线 0.5
             { type: 'line', from: [-1, 0.5], to: [2, 0.5], color: GREEN, dashed: true, lineWidth: 1.5 },
+            // 观察竖线
+            { type: 'line', from: [0.5, -0.3], to: [0.5, 2.5], color: '#9aa7b4', dashed: true, lineWidth: 1 },
             { type: 'text', x: 1, y: 0.4, text: 'L=1/2', color: GREEN, fontSize: 13 },
             { type: 'text', x: -0.9, y: 2.3, text: '蓝:原式  橙:1次洛必达  紫:2次(定型)', color: '#9aa7b4', fontSize: 10, align: 'left' },
+            { type: 'text', x: -0.9, y: 1.9, text: '拖 x→0，三曲线同趋 0.5', color: '#4ade80', fontSize: 11, align: 'left' },
           ],
+        },
+        controls: [
+          { name: 'x', label: '观察点 x（趋于 0）', type: 'slider', min: -0.9, max: 1.8, step: 0.02, value: 0.5 },
+        ],
+        onControl: function (name, value, scene) {
+          if (name !== 'x') return;
+          var x = value;
+          scene.layers[4].from = [x, -0.3];
+          scene.layers[4].to = [x, 2.5];
+          // 三条曲线在 x 处的值(x=0 时取极限 0.5)
+          var v1, v2, v3;
+          if (Math.abs(x) < 0.001) { v1 = v2 = v3 = 0.5; }
+          else {
+            v1 = (Math.exp(x) - 1 - x) / (x * x);
+            v2 = (Math.exp(x) - 1) / (2 * x);
+            v3 = Math.exp(x) / 2;
+          }
+          scene.layers[7].text = 'x=' + x.toFixed(3) + '  蓝=' + v1.toFixed(3) + '  橙=' + v2.toFixed(3) + '  紫=' + v3.toFixed(3);
         },
       },
 
@@ -187,10 +208,26 @@ $$\\frac{f}{g} \\xrightarrow{L'H} \\frac{f'}{g'} \\xrightarrow{L'H} \\frac{f''}{
             { type: 'plot', fn: '(exp(x) - exp(-x))/(exp(x) + exp(-x))', color: ORANGE, lineWidth: 2.5, range: [0.1, 5.8], samples: 100 },
             // 极限线 1
             { type: 'line', from: [-1, 1], to: [6, 1], color: GREEN, dashed: true, lineWidth: 1.5 },
+            // 观察竖线
+            { type: 'line', from: [2, -0.5], to: [2, 3], color: '#9aa7b4', dashed: true, lineWidth: 1 },
             { type: 'text', x: 3, y: 2.5, text: '蓝:原式 → 1', color: BLUE, fontSize: 12, align: 'left' },
             { type: 'text', x: 3, y: 2.1, text: '橙:洛必达后 → 1（互为倒数）', color: ORANGE, fontSize: 12, align: 'left' },
             { type: 'text', x: 3, y: 1.7, text: '⚠ 洛必达看似“没用”，但极限确为 1', color: GREEN, fontSize: 11, align: 'left' },
+            { type: 'text', x: -0.9, y: 2.8, text: '拖 x 增大，两曲线同趋 1', color: '#9aa7b4', fontSize: 11, align: 'left' },
           ],
+        },
+        controls: [
+          { name: 'x', label: '观察点 x（趋于 ∞）', type: 'slider', min: 0.2, max: 5.5, step: 0.05, value: 2 },
+        ],
+        onControl: function (name, value, scene) {
+          if (name !== 'x') return;
+          var x = value;
+          scene.layers[3].from = [x, -0.5];
+          scene.layers[3].to = [x, 3];
+          var ex = Math.exp(x), emx = Math.exp(-x);
+          var v1 = (ex + emx) / (ex - emx);
+          var v2 = (ex - emx) / (ex + emx);
+          scene.layers[7].text = 'x=' + x.toFixed(2) + '  蓝=' + v1.toFixed(3) + '  橙=' + v2.toFixed(3) + '（积=' + (v1 * v2).toFixed(3) + '）';
         },
       },
     ],

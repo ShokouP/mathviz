@@ -1,5 +1,45 @@
 # 更新记录
 
+## v0.1.28 — 2026-08-07 · 30 套课案交互补全 + 题库扩至 116 题
+
+### 课案交互完善（12 套，共补 17 个滑块步骤）
+对前 30 套课案做"完整度体检"，发现 12 套课案的某些步骤缺 slider 交互（纯静态图）。本轮全部补齐，每套均达 4/4 步可交互（intro 5/5 中 4 步交互，保留 1 步总结静态）：
+
+| 课案 | 补强内容 |
+|---|---|
+| `lagrange-multiplier` | step1 θ 沿圆走追踪 f 值 / step3 r 滑块联动 λ=r/2 / step4 c 滑块约束直线平移（原仅 1/4 交互，最严重）|
+| `integral` | step1 n 滑块黎曼细分 / step3 加图例 / step4 n→∞ 收敛演示 |
+| `lhopital` | step2 x 滑块看三次洛必达贴合 / step4 x 滑块看循环曲线同趋 1 |
+| `positive-series` | step2/step4 N 滑块看部分和逼近 |
+| `partial-derivative` | step3/step4 观察点滑块实时算偏导值、验证克莱罗定理 |
+| `fourier-series` | step1 频率滑块 / step2 重建初始 layers / step4 锯齿波初始内容 |
+| `monotonicity-extrema` | step4 区间右端点 b 滑块，看最值在端点与驻点间切换 |
+| `indefinite-integral` | step4 x 滑块验证 F′=xeˣ |
+| `mean-value-theorem` | step4 ξ 滑块找切线∥割线（与前三步风格统一）|
+| `convexity` | step3/step4 观察点滑块、詹森不等式端点联动 |
+| `double-integral` | step4 θ 滑块扫描圆域演示"先 r 后 θ" |
+| `gradient` | step4 起点角度 φ 滑块，下降路径重算 |
+| `ode` | step3 修正叙事与控件不匹配（R→ω，匹配相平面椭圆扁度）|
+
+### 题库扩充（+42 题，74 → 116 题）
+为 10 套原本零题的课案各补 4 题（1 基础 / 2 进阶 / 1 挑战，题型混搭 single/multi/judge/fill），并为 `ode` 补 2 题至 4 题：
+
+`function-properties`、`inverse-composite`、`elementary-functions`、`polar-parametric`、`infinitesimals`、`cv-continuity`、`implicit-derivative`、`differential`、`monotonicity-extrema`、`curvature`（各 +4），`ode`（+2）。
+
+现 30 套课案**全部配套 ≥3 题**，题库题型分布更均衡（新增判断/填空/多选比例上升）。
+
+### 验证
+- 自研 Node 校验脚本（加载引擎真实 `LAYER_SPECS` + 题库）：30 套课案结构 + scene 协议 + 题目字段 + courseId 关联 + onControl/bind 配对 **0 问题** ✓
+- 浏览器实跑抽检：lagrange step3 r 滑块（1→1.5 联动）、integral step1 n（4→40）、fourier step2 N（3→30 初始 layers 已重建）、curvature 题库 4 题渲染作答 **全部正常** ✓
+- 注：v0.1.26 CHANGELOG 记"74 题"与实际一致（v0.1.27 未新增题）；本轮起为 116 题。
+
+### 技术说明
+- 所有改动遵循现有风格：无构建、ES5 `var`/`function`、点路径 `bind`、幂用 `^`、统一调色板。
+- 仅改 `js/data/courses/*.js`（12 个）、`js/data/questions.js`、`CHANGELOG.md`。**未动引擎/路由/页面逻辑**，零架构风险。
+- `course.js:508` 的深拷贝对 step 级 `onControl`（在 scene 外）无影响，新增 slider 走标准路径。
+
+---
+
 ## v0.1.27 — 2026-08-02 · 一次性新增 10 套课案，总计达 30 套
 
 ### 新增（10 套）

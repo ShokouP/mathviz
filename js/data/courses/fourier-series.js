@@ -63,7 +63,19 @@ $$a_n = \\frac{1}{\\pi}\\int_{-\\pi}^{\\pi} f(x)\\cos nx\\,dx, \\quad b_n = \\fr
             { type: 'plot', fn: 'sin(5*x)', color: PURPLE, lineWidth: 1.8, range: [-6.2, 6.2], samples: 180 },
             { type: 'text', x: -6, y: 1.5, text: '蓝:sin x（基频） 橙:sin 3x 紫:sin 5x', color: '#9aa7b4', fontSize: 11, align: 'left' },
             { type: 'text', x: -6, y: 1.1, text: '频率越高，振荡越密', color: GREEN, fontSize: 12, align: 'left' },
+            { type: 'text', x: -6, y: 0.7, text: '拖 f 调紫色曲线的频率', color: PURPLE, fontSize: 11, align: 'left' },
           ],
+        },
+        controls: [
+          { name: 'f', label: '紫色曲线频率 f', type: 'slider', min: 1, max: 12, step: 1, value: 5 },
+        ],
+        onControl: function (name, value, scene) {
+          if (name !== 'f') return;
+          var f = Math.round(value);
+          // 第三条曲线(紫,layers[2])改为 sin(f*x),采样数随频率提高
+          scene.layers[2].fn = 'sin(' + f + '*x)';
+          scene.layers[2].samples = Math.min(60 + f * 25, 400);
+          scene.layers[4].text = '紫:sin(' + f + 'x) — 一个周期内 ' + f + ' 个完整振荡';
         },
       },
 
@@ -86,15 +98,24 @@ $$f(x) = \\frac{4}{\\pi}\\sum_{k=1}^{\\infty} \\frac{\\sin(2k-1)x}{2k-1} = \\fra
 > **直觉**：方波的"尖角"需要无穷高频来构造。项数越多，能表达的细节越精细。
 > 这就是"频域"思维——**时域的形状 = 频域的配方**。`,
 
-        scene: {
-          axes: { xRange: [-6.5, 6.5], yRange: [-1.8, 1.8] },
-          layers: [
-            // 理想方波（用两段水平线 + 跳变近似，这里用 plot 画 sign(sin x)）
-            { type: 'plot', fn: 'abs(sin(x))/sin(x)', color: GREEN, lineWidth: 1.5, range: [-6.2, 6.2], samples: 500 },
-            // 傅里叶部分和（初始 N=3）—— 用 plot 但需自定义函数，改用多条 plot 近似
-            // 这里用 plot 画 fourierSquare 的近似表达式较难，改用 onControl 动态生成采样点
-          ],
-        },
+        scene: (function () {
+          // 初始 N=3 的方波傅里叶部分和采样点
+          var pts = [];
+          for (var i = 0; i <= 400; i++) {
+            var x = -6.2 + (12.4 * i / 400);
+            pts.push({ type: 'point', x: x, y: fourierSquare(x, 3), color: BLUE, radius: 1.2 });
+          }
+          return {
+            axes: { xRange: [-6.5, 6.5], yRange: [-1.8, 1.8] },
+            layers: [
+              // 理想方波（用 plot 画 sign(sin x)）
+              { type: 'plot', fn: 'abs(sin(x))/sin(x)', color: GREEN, lineWidth: 1.5, range: [-6.2, 6.2], samples: 500 },
+            ].concat(pts).concat([
+              { type: 'text', x: -6, y: 1.5, text: '蓝:前 N 项部分和  绿:理想方波', color: '#9aa7b4', fontSize: 11, align: 'left' },
+              { type: 'text', x: -6, y: 1.1, text: 'N=3：仅正弦基，远未成方', color: BLUE, fontSize: 12, align: 'left' },
+            ]),
+          };
+        })(),
         controls: [
           { name: 'N', label: '谐波数 N', type: 'slider', min: 1, max: 50, step: 1, value: 3 },
         ],
@@ -109,8 +130,11 @@ $$f(x) = \\frac{4}{\\pi}\\sum_{k=1}^{\\infty} \\frac{\\sin(2k-1)x}{2k-1} = \\fra
             var y = fourierSquare(x, N);
             pts.push({ type: 'point', x: x, y: y, color: BLUE, radius: 1.2 });
           }
-          // 保留方波参照层，替换为采样点
-          scene.layers = scene.layers.slice(0, 1).concat(pts);
+          // 保留方波参照层(0) + 两个图例(末两层的倒序读取更稳:直接重建)
+          scene.layers = [scene.layers[0]].concat(pts).concat([
+            { type: 'text', x: -6, y: 1.5, text: '蓝:前 N 项部分和  绿:理想方波', color: '#9aa7b4', fontSize: 11, align: 'left' },
+            { type: 'text', x: -6, y: 1.1, text: 'N=' + N + (N >= 20 ? '：已相当接近方波' : '：波形逐渐变方'), color: BLUE, fontSize: 12, align: 'left' },
+          ]);
         },
       },
 
@@ -190,19 +214,33 @@ $$f(x) = \\frac{4}{\\pi}\\sum_{k=1}^{\\infty} \\frac{\\sin(2k-1)x}{2k-1} = \\fra
 右侧展示傅里叶级数的两个面孔：时域（蓝色波形）与频域（橙色频谱柱）。
 **同一个信号，两种语言**——这是信号处理、压缩（JPEG/MPEG）、量子力学的共同根基。`,
 
-        scene: {
-          axes: { xRange: [-6.5, 6.5], yRange: [-1.8, 1.8] },
-          layers: [
-            // 时域：锯齿波的前几项傅里叶部分和（用 sin(nx)/n 叠加）
-          ],
-        },
+        scene: (function () {
+          // 初始 N=8 的锯齿波傅里叶部分和采样点
+          function sawtooth(x, N) {
+            var y = 0;
+            for (var n = 1; n <= N; n++) { y += Math.pow(-1, n + 1) * Math.sin(n * x) / n; }
+            return y * 2 / Math.PI;
+          }
+          var pts = [];
+          for (var i = 0; i <= 400; i++) {
+            var x = -6.2 + (12.4 * i / 400);
+            pts.push({ type: 'point', x: x, y: sawtooth(x, 8), color: BLUE, radius: 1.2 });
+          }
+          return {
+            axes: { xRange: [-6.5, 6.5], yRange: [-1.8, 1.8] },
+            layers: pts.concat([
+              { type: 'text', x: -6, y: 1.5, text: '锯齿波傅里叶部分和（N=8 项）', color: '#9aa7b4', fontSize: 11, align: 'left' },
+              { type: 'text', x: -6, y: 1.1, text: '时域波形 ↔ 频域配方：同一信号两种语言', color: GREEN, fontSize: 12, align: 'left' },
+            ]),
+          };
+        })(),
         controls: [
           { name: 'N', label: '谐波数 N', type: 'slider', min: 1, max: 40, step: 1, value: 8 },
         ],
         onControl: function (name, value, scene) {
           if (name !== 'N') return;
           var N = Math.round(value);
-          // 锯齿波傅里叶级数：f(x) = (2/π)Σ(-1)^(n+1) sin(nx)/n，但简化用 sin 叠加
+          // 锯齿波傅里叶级数：f(x) = (2/π)Σ(-1)^(n+1) sin(nx)/n
           var pts = [];
           var samples = 400;
           for (var i = 0; i <= samples; i++) {
@@ -216,6 +254,7 @@ $$f(x) = \\frac{4}{\\pi}\\sum_{k=1}^{\\infty} \\frac{\\sin(2k-1)x}{2k-1} = \\fra
           }
           scene.layers = pts.concat([
             { type: 'text', x: -6, y: 1.5, text: '锯齿波傅里叶部分和（N=' + N + ' 项）', color: '#9aa7b4', fontSize: 11, align: 'left' },
+            { type: 'text', x: -6, y: 1.1, text: N >= 25 ? 'N 大：跳变更陡，间断点处仍有吉布斯过冲' : '时域波形 ↔ 频域配方：同一信号两种语言', color: GREEN, fontSize: 12, align: 'left' },
           ]);
         },
       },

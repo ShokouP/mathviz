@@ -139,33 +139,33 @@ $$\\frac{dx}{dt} = v, \\qquad \\frac{dv}{dt} = -\\omega^2 x$$
           // 相平面 x-v：横轴 x（位移），纵轴 v（速度）
           axes: { xRange: [-4, 4], yRange: [-4, 4] },
           layers: [
-            // 相平面方向场：dx/dt=v, dv/dt=-ω²x。注意 vectorField 的 dx/dy 是对 (x,y) 的，
-            // 这里 y 轴扮演 v。所以 dx="y"(=v), dy="-x"(=-ω²x/ω²，归一化后等价)
-            // 为简洁取 ω=1：dx=v=y, dy=-x（旋转场）
+            // 相平面方向场：dx/dt=v, dv/dt=-ω²x。
+            // vectorField 的 dx/dy 对 (x,y)，这里 y 轴扮演 v，故 dx="y"(=v), dy="-ω²x"
             { type: 'vectorField', dx: 'y', dy: '-x', nx: 11, ny: 11, color: PURPLE, lineWidth: 1 },
-            // 椭圆解轨道：x²+v²=R²，参数化 cos/sin。用 plot 画 v=±sqrt(R²-x²) 两段
+            // 椭圆解轨道：x²+(v/ω)²=R² → v=±ω·sqrt(R²-x²)。取 R=2，ω 由滑块控制
             { type: 'plot', fn: 'sqrt(4 - x^2)', color: BLUE, lineWidth: 2.5, range: [-2, 2] },
             { type: 'plot', fn: '-sqrt(4 - x^2)', color: BLUE, lineWidth: 2.5, range: [-2, 2] },
             // 初始点
             { type: 'point', x: 2, y: 0, color: ORANGE, label: '初始' },
-            { type: 'text', x: 3, y: -3.5, text: '相平面 (x, v)', color: '#9aa7b4', fontSize: 12 },
+            { type: 'text', x: 2.2, y: -3.5, text: '相平面 (x, v)  ω=1.0', color: '#9aa7b4', fontSize: 12, align: 'left' },
+            { type: 'text', x: 2.2, y: -3.9, text: 'ω 大 → 椭圆更扁（v 方向拉长）', color: GREEN, fontSize: 11, align: 'left' },
           ],
         },
         controls: [
-          { name: 'R', label: '振幅 R', type: 'slider', min: 0.5, max: 3.5, step: 0.1, value: 2 },
+          { name: 'omega', label: '角频率 ω', type: 'slider', min: 0.4, max: 2, step: 0.05, value: 1 },
         ],
         onControl: function (name, value, scene) {
-          if (name !== 'R') return;
-          var R = value;
-          // 椭圆半径随振幅变
-          scene.layers[1].fn = 'sqrt(' + (R * R) + ' - x^2)';
-          scene.layers[1].range = [-R, R];
+          if (name !== 'omega') return;
+          var w = value;
+          var R = 2;
+          // 椭圆：v = ±ω·sqrt(R²-x²)。ω 越大，v 方向(纵轴)越拉长 → 椭圆越扁(纵向更高)
+          scene.layers[1].fn = w + '*sqrt(' + (R * R) + ' - x^2)';
           scene.layers[1]._fn = undefined;
-          scene.layers[2].fn = '-sqrt(' + (R * R) + ' - x^2)';
-          scene.layers[2].range = [-R, R];
+          scene.layers[2].fn = '-' + w + '*sqrt(' + (R * R) + ' - x^2)';
           scene.layers[2]._fn = undefined;
-          scene.layers[3].x = R;
-          scene.layers[3].y = 0;
+          // 方向场的 dy = -ω²x
+          scene.layers[0].dy = '-' + (w * w) + '*x';
+          scene.layers[4].text = '相平面 (x, v)  ω=' + w.toFixed(2) + '  周期 T=2π/ω=' + (2 * Math.PI / w).toFixed(2);
         },
       },
 
