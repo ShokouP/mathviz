@@ -40,7 +40,7 @@
 - 4.4 函数单调性与极值（...）— ✅ `monotonicity-extrema`
 - 4.5 函数凹凸与拐点 — ✅ `convexity`
 - 4.6 曲率（...）— ✅ `curvature`
-- 4.7 方程近似解（牛顿法）— 🚧 `newtons-method`
+- 4.7 方程近似解（牛顿法）— ✅ `newtons-method`
 
 ## 第三篇 一元函数积分学（大一下 §1）
 
@@ -114,9 +114,9 @@
 ---
 
 ## 进度统计
-- ✅ 已完成：30 套（... partial-derivative / gradient / double-integral / lagrange-multiplier）
-- 🚧 计划中：约 20 套
-- 配套题库：74 题，覆盖全部 30 套课案，覆盖全部 20 套课案；考试支持综合卷 + 单章卷
+- ✅ 已完成：31 套（... partial-derivative / gradient / double-integral / lagrange-multiplier / newtons-method）
+- 🚧 计划中：约 19 套
+- 配套题库：120 题，覆盖全部 31 套课案；考试支持综合卷 + 单章卷
 - 🎯 批次 1（一元主线）+ 批次 2（一元进阶）完成；下一步批次 3（多元微积分）
 - ❌ 尚未规划：暂无（大纲已覆盖到曲面论初步）
 - 🎯 批次 1 完成（一元微积分主线）

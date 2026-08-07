@@ -1007,6 +1007,40 @@
       explain: '抛物线在顶点 $(0,0)$ 处弯曲最厉害，曲率最大；向两端越走越平（趋近直线），曲率减小趋近 0。',
       points: ['抛物线', '曲率最大点'],
     },
+
+    // ============ newtons-method（牛顿法）============
+    {
+      id: 'q-nm-1', courseId: 'newtons-method', chapter: '迭代公式', difficulty: 1, type: 'single',
+      stem: '牛顿法求 $f(x)=0$ 的根，迭代公式是？',
+      options: ['A. $x_{n+1}=x_n+f(x_n)/f\'(x_n)$', 'B. $x_{n+1}=x_n-f(x_n)/f\'(x_n)$', 'C. $x_{n+1}=x_n-f\'(x_n)/f(x_n)$', 'D. $x_{n+1}=f(x_n)/f\'(x_n)$'],
+      answer: 1,
+      explain: '在 $x_n$ 处作切线 $y=f(x_n)+f\'(x_n)(x-x_n)$，令 $y=0$ 解出 $x_{n+1}=x_n-f(x_n)/f\'(x_n)$。即"切线与 $x$ 轴交点"。',
+      points: ['牛顿迭代公式'],
+    },
+    {
+      id: 'q-nm-2', courseId: 'newtons-method', chapter: '迭代计算', difficulty: 2, type: 'fill',
+      stem: '用牛顿法求 $\\sqrt{2}$（即 $f(x)=x^2-2=0$ 的正根）。取 $x_0=2$，求 $x_1=$ ？（保留三位小数）',
+      options: [],
+      answer: '1.500',
+      explain: '$f(2)=2$，$f\'(2)=4$。$x_1=2-2/4=1.5$。再迭代：$x_2=1.5-0.25/3≈1.4167$，已接近 $\\sqrt{2}≈1.4142$。',
+      points: ['牛顿法计算', '求根'],
+    },
+    {
+      id: 'q-nm-3', courseId: 'newtons-method', chapter: '收敛速度', difficulty: 2, type: 'single',
+      stem: '在根附近，牛顿法的收敛速度是？',
+      options: ['A. 线性收敛（每步误差成比例减小）', 'B. 二次收敛（每步误差平方衰减）', 'C. 不收敛', 'D. 与初值无关'],
+      answer: 1,
+      explain: '牛顿法在根附近**二次收敛**：$e_{n+1}≈C\\,e_n^2$，有效位数每步翻倍。这比二分法（线性收敛）快得多。',
+      points: ['二次收敛', '收敛阶'],
+    },
+    {
+      id: 'q-nm-4', courseId: 'newtons-method', chapter: '陷阱', difficulty: 3, type: 'multi',
+      stem: '牛顿法可能失效或变慢的情形有（多选）？',
+      options: ['A. $f\'(x_n)=0$（切线水平）', 'B. 初值离根太远', 'C. 根是重根（如 $f(x)=x^3$ 的根 $0$）', 'D. 函数处处可导且初值靠近单根'],
+      answer: [0, 1, 2],
+      explain: 'A：分母为 0 公式崩溃；B：可能发散或收敛到错误的根；C：重根处导数趋于 0，收敛退化为线性甚至更慢。D 是牛顿法**正常工作**的条件，不是失效情形。',
+      points: ['牛顿法陷阱', '驻点失效', '重根'],
+    },
   ];
 
   // ---- 查询接口 ----
