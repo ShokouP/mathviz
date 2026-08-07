@@ -1041,6 +1041,40 @@
       explain: 'A：分母为 0 公式崩溃；B：可能发散或收敛到错误的根；C：重根处导数趋于 0，收敛退化为线性甚至更慢。D 是牛顿法**正常工作**的条件，不是失效情形。',
       points: ['牛顿法陷阱', '驻点失效', '重根'],
     },
+
+    // ============ alternating-series（交错级数）============
+    {
+      id: 'q-as-1', courseId: 'alternating-series', chapter: '交错级数', difficulty: 1, type: 'single',
+      stem: '交错级数 $\\sum_{n=1}^{\\infty} (-1)^{n-1} a_n$（$a_n>0$）的通项特征是？',
+      options: ['A. 各项正负相同', 'B. 各项正负交替出现', 'C. 各项恒为正', 'D. 各项恒为负'],
+      answer: 1,
+      explain: '交错级数因 $(-1)^{n-1}$ 使各项**正负交替**：$a_1 - a_2 + a_3 - a_4 + \\cdots$。经典例子是交错调和级数 $1 - 1/2 + 1/3 - \\cdots = \\ln 2$。',
+      points: ['交错级数定义'],
+    },
+    {
+      id: 'q-as-2', courseId: 'alternating-series', chapter: '莱布尼茨判别法', difficulty: 2, type: 'multi',
+      stem: '莱布尼茨判别法判定 $\\sum (-1)^{n-1} a_n$ 收敛，需要哪两个条件（多选）？',
+      options: ['A. $a_n$ 单调递减', 'B. $\\lim_{n\\to\\infty} a_n = 0$', 'C. $\\sum a_n$ 收敛', 'D. $a_n$ 有界'],
+      answer: [0, 1],
+      explain: '莱布尼茨判别法：$a_n$ 单调递减 **且** $a_n\\to 0$，则交错级数收敛。两条件缺一不可：递减保证步长缩短，趋零保证步长消失。C、D 不是该判别法的条件。',
+      points: ['莱布尼茨判别法', '收敛充分条件'],
+    },
+    {
+      id: 'q-as-3', courseId: 'alternating-series', chapter: '截断误差', difficulty: 2, type: 'fill',
+      stem: '用莱布尼茨判别法收敛的交错级数，前 $n$ 项部分和 $S_n$ 近似真值 $S$ 的截断误差 $|R_n| \\le$ ？（用通项表示）',
+      options: [],
+      answer: 'a_{n+1}',
+      explain: '$|R_n| = |S - S_n| \\le a_{n+1}$，即误差**不超过第一个被舍弃的项**。这是交错级数独有的优势——正项级数没有这么干净的误差控制。',
+      points: ['截断误差', '莱布尼茨误差估计'],
+    },
+    {
+      id: 'q-as-4', courseId: 'alternating-series', chapter: 'Riemann 重排定理', difficulty: 3, type: 'single',
+      stem: '关于**条件收敛**的级数（$\\sum a_n$ 收敛但 $\\sum |a_n|$ 发散），Riemann 重排定理说的是？',
+      options: ['A. 重排后和不变', 'B. 适当重排可使级数收敛到任意实数（或发散到 $\\pm\\infty$）', 'C. 重排后必然发散', 'D. 只有绝对收敛级数才能重排'],
+      answer: 1,
+      explain: 'Riemann 重排定理：条件收敛级数通过**适当重排顺序**，可收敛到任意实数，甚至发散到 $\\pm\\infty$。例如交错调和级数（和 $\\ln 2$）"2 正 1 负"重排后和变为 $\\frac{3}{2}\\ln 2$。这揭示了条件收敛级数依赖顺序。',
+      points: ['Riemann 重排定理', '条件收敛', '绝对收敛 vs 条件收敛'],
+    },
   ];
 
   // ---- 查询接口 ----
