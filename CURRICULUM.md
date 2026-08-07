@@ -63,7 +63,7 @@
 - 7.1 常数项级数概念与性质 — ✅ `series-basics`
 - 7.2 正项级数审敛法（比较/比值/根值）— ✅ `positive-series`
 - 7.3 交错级数与莱布尼茨判别法 — ✅ `alternating-series`
-- 7.4 绝对收敛与条件收敛 — 🚧 `absolute-convergence`
+- 7.4 绝对收敛与条件收敛 — ✅ `absolute-convergence`
 
 ### 第 8 章 函数项级数
 - 8.1 函数项级数的一致收敛 — 🚧 `uniform-convergence`
@@ -114,9 +114,9 @@
 ---
 
 ## 进度统计
-- ✅ 已完成：32 套（... lagrange-multiplier / newtons-method / alternating-series）
-- 🚧 计划中：约 18 套
-- 配套题库：124 题，覆盖全部 32 套课案；考试支持综合卷 + 单章卷
+- ✅ 已完成：33 套（... newtons-method / alternating-series / absolute-convergence）
+- 🚧 计划中：约 17 套
+- 配套题库：128 题，覆盖全部 33 套课案；考试支持综合卷 + 单章卷
 - 🎯 批次 1（一元主线）+ 批次 2（一元进阶）完成；下一步批次 3（多元微积分）
 - ❌ 尚未规划：暂无（大纲已覆盖到曲面论初步）
 - 🎯 批次 1 完成（一元微积分主线）

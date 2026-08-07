@@ -16,7 +16,7 @@
     get byId() { return this._byId; },
     get list() {
       // 固定展示顺序
-      const ORDER = ['intro', 'function-properties', 'inverse-composite', 'elementary-functions', 'polar-parametric', 'limit', 'limit-laws', 'infinitesimals', 'cv-continuity', 'derivative', 'derivative-rules', 'implicit-derivative', 'differential', 'mean-value-theorem', 'lhopital', 'monotonicity-extrema', 'convexity', 'curvature', 'integral', 'indefinite-integral', 'integral-applications', 'taylor', 'series-basics', 'positive-series', 'fourier-series', 'ode', 'partial-derivative', 'gradient', 'double-integral', 'lagrange-multiplier', 'newtons-method', 'alternating-series'];
+      const ORDER = ['intro', 'function-properties', 'inverse-composite', 'elementary-functions', 'polar-parametric', 'limit', 'limit-laws', 'infinitesimals', 'cv-continuity', 'derivative', 'derivative-rules', 'implicit-derivative', 'differential', 'mean-value-theorem', 'lhopital', 'monotonicity-extrema', 'convexity', 'curvature', 'integral', 'indefinite-integral', 'integral-applications', 'taylor', 'series-basics', 'positive-series', 'fourier-series', 'ode', 'partial-derivative', 'gradient', 'double-integral', 'lagrange-multiplier', 'newtons-method', 'alternating-series', 'absolute-convergence'];
       const all = Object.values(this._byId);
       const ordered = ORDER.map((id) => this._byId[id]).filter(Boolean);
       // 兜底：补上 ORDER 之外的课案

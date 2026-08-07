@@ -1075,6 +1075,40 @@
       explain: 'Riemann 重排定理：条件收敛级数通过**适当重排顺序**，可收敛到任意实数，甚至发散到 $\\pm\\infty$。例如交错调和级数（和 $\\ln 2$）"2 正 1 负"重排后和变为 $\\frac{3}{2}\\ln 2$。这揭示了条件收敛级数依赖顺序。',
       points: ['Riemann 重排定理', '条件收敛', '绝对收敛 vs 条件收敛'],
     },
+
+    // ============ absolute-convergence（绝对收敛与条件收敛）============
+    {
+      id: 'q-ac-1', courseId: 'absolute-convergence', chapter: '收敛分类', difficulty: 1, type: 'single',
+      stem: '若 $\\sum |a_n|$ 收敛，则 $\\sum a_n$ 称为？',
+      options: ['A. 绝对收敛', 'B. 条件收敛', 'C. 发散', 'D. 无法判断'],
+      answer: 0,
+      explain: '**绝对收敛**的定义：$\\sum |a_n|$ 收敛。这是"稳固"的收敛——即使去掉所有负号级数仍收敛，说明正负项总量都有限。',
+      points: ['绝对收敛定义'],
+    },
+    {
+      id: 'q-ac-2', courseId: 'absolute-convergence', chapter: '判别', difficulty: 2, type: 'single',
+      stem: '级数 $\\sum_{n=1}^{\\infty} \\frac{(-1)^n}{\\sqrt{n}}$ 是？',
+      options: ['A. 绝对收敛', 'B. 条件收敛', 'C. 发散', 'D. 无法判断'],
+      answer: 1,
+      explain: '取绝对值得 $\\sum 1/\\sqrt{n} = \\sum 1/n^{1/2}$，$p=1/2 \\le 1$ 发散。但原级数是交错的，$a_n=1/\\sqrt{n}$ 递减且趋于 0，由莱布尼茨判别法收敛。故为**条件收敛**。',
+      points: ['条件收敛判别', '莱布尼茨判别法', 'p 级数'],
+    },
+    {
+      id: 'q-ac-3', courseId: 'absolute-convergence', chapter: '绝对收敛性质', difficulty: 2, type: 'judge',
+      stem: '"若 $\\sum a_n$ 收敛，则 $\\sum |a_n|$ 也收敛"。',
+      options: ['对', '错'],
+      answer: false,
+      explain: '反例：交错调和级数 $\\sum (-1)^{n-1}/n$ 收敛到 $\\ln 2$，但其绝对值级数 $\\sum 1/n$（调和级数）发散。这正是**条件收敛**——原级数收敛但绝对值级数发散。正确命题是反向的：$\\sum|a_n|$ 收敛 ⟹ $\\sum a_n$ 收敛。',
+      points: ['绝对收敛 vs 条件收敛', '逆命题'],
+    },
+    {
+      id: 'q-ac-4', courseId: 'absolute-convergence', chapter: '判别流程', difficulty: 3, type: 'multi',
+      stem: '关于任意项级数 $\\sum a_n$ 的判别，下列说法**正确**的有（多选）？',
+      options: ['A. 若 $\\sum |a_n|$ 收敛，则 $\\sum a_n$ 收敛', 'B. 若用比值法得 $\\lim |a_{n+1}/a_n| > 1$，则 $\\sum a_n$ 发散', 'C. 若 $\\sum |a_n|$ 发散（比较法），则 $\\sum a_n$ 必发散', 'D. 绝对收敛级数任意重排后和不变'],
+      answer: [0, 1, 3],
+      explain: 'A：绝对收敛 ⟹ 收敛（基本定理）。B：比值 $>1$ 时 $|a_n|\\not\\to 0$ 故 $a_n\\not\\to 0$，发散。D：绝对收敛的重排不变性（Riemann 重排定理的逆否）。C **错**：比较法判 $\\sum|a_n|$ 发散不能推出原级数发散（可能条件收敛，如交错调和级数）。',
+      points: ['判别流程', '比值法', '重排定理'],
+    },
   ];
 
   // ---- 查询接口 ----
